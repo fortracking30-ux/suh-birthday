@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Suh! 🌸</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+  <!-- Background Music -->
+  <audio id="bg-music" loop>
+    <source src="song.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="container">
+    
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+      <div class="lily-icon-header">🪻 🌸 🪻</div>
+      <span class="subtitle">A Special Birthday Wish For</span>
+      <h1 class="hero-title">Suh</h1>
+      <p class="hero-tagline">Pure, gentle, and blooming every single day ✨</p>
+      <div class="scroll-indicator">Scroll down <span>↓</span></div>
+    </section>
+
+    <!-- PHOTO GALLERY GRID -->
+    <section class="gallery-section">
+      <h2 class="section-title">Memories & Bloom 📸</h2>
+      <div class="gallery-grid">
+        <div class="photo-card"><img src="photo1.jpg" alt="Suh 1"><div class="frame-tag">Pure</div></div>
+        <div class="photo-card"><img src="photo2.jpg" alt="Suh 2"><div class="frame-tag">Grace</div></div>
+        <div class="photo-card"><img src="photo3.jpg" alt="Suh 3"><div class="frame-tag">Joy</div></div>
+        <div class="photo-card"><img src="photo4.jpg" alt="Suh 4"><div class="frame-tag">Shine</div></div>
+        <div class="photo-card"><img src="photo5.jpg" alt="Suh 5"><div class="frame-tag">Lily</div></div>
+      </div>
+    </section>
+
+    <!-- LETTER NOTE SECTION -->
+    <section class="letter-section">
+      <div class="letter-card">
+        <div class="floral-corner top-left">⚜️</div>
+        <div class="floral-corner bottom-right">⚜️</div>
+        <h3 class="letter-heading">Dearest Suh,</h3>
+        <p class="letter-body">"Happy birthday to the human form of lillies... keep shining sweetie! God bless you! 🤍"</p>
+        <div class="letter-signoff">— With Endless Love</div>
+      </div>
+    </section>
+
+    <!-- CAKE & MIC CANDLE BLOW SECTION -->
+    <section class="cake-section">
+      <h2 class="section-title">Make a Wish 🎂</h2>
+      <p class="cake-subtitle">Blow into your microphone (or tap the flame) to blow out the candle!</p>
+
+      <div class="interactive-cake">
+        <div class="candle">
+          <div class="flame" id="candle-flame"></div>
+        </div>
+        <div class="cake-top"></div>
+        <div class="cake-base"></div>
+      </div>
+
+      <div class="status-box" id="mic-status">Tap below to activate microphone detection 🎙️</div>
+      <button class="btn-primary" id="mic-btn">Activate Mic & Blow Candle ✨</button>
+    </section>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
