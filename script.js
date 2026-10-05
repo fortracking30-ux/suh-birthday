@@ -1,48 +1,33 @@
-let currentSlide = 0;
-let slides;
-let totalSlides = 0;
-
 let audioContext;
 let analyser;
 let microphone;
 let isBlown = false;
 
-document.addEventListener('DOMContentLoaded', () => {
-  slides = document.querySelectorAll('.slide');
-  totalSlides = slides.length;
-
-  const welcomeOverlay = document.getElementById('welcome-overlay');
-  const startBtn = document.getElementById('start-btn');
+function goToPage(pageNumber) {
+  // Play music on first navigation click
   const music = document.getElementById('bg-music');
-
-  if (startBtn) {
-    startBtn.addEventListener('click', () => {
-      // Hide welcome overlay immediately on click
-      if (welcomeOverlay) {
-        welcomeOverlay.classList.add('hidden');
-      }
-
-      // Play audio gracefully without locking up
-      if (music) {
-        music.currentTime = 0;
-        const playPromise = music.play();
-        if (playPromise !== undefined) {
-          playPromise.catch(error => {
-            console.log("Audio playback blocked or file missing:", error);
-          });
-        }
-      }
-    });
+  if (music && music.paused) {
+    music.play().catch(e => console.log("Audio deferred:", e));
   }
 
-  // Slideshow Navigation
-  const prevBtn = document.getElementById('prev-btn');
-  const nextBtn = document.getElementById('next-btn');
+  // Hide all pages
+  const pages = document.querySelectorAll('.page');
+  pages.forEach(p => p.classList.remove('active'));
 
-  if (prevBtn) prevBtn.addEventListener('click', () => changeSlide(-1));
-  if (nextBtn) nextBtn.addEventListener('click', () => changeSlide(1));
+  // Show requested page
+  const targetPage = document.getElementById(`page-${pageNumber}`);
+  if (targetPage) {
+    targetPage.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
 
-  // Candle & Pop-up Modal Controls
+function playfulNo() {
+  alert("Wrong answer! Tapping Yes for you 😉❤️");
+  goToPage(1);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
   const micBtn = document.getElementById('mic-btn');
   const flame = document.getElementById('candle-flame');
   const closeModalBtn = document.getElementById('close-modal-btn');
@@ -51,23 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (flame) flame.addEventListener('click', triggerBlowout);
   if (closeModalBtn) {
     closeModalBtn.addEventListener('click', () => {
-      const modal = document.getElementById('wish-modal');
-      if (modal) modal.classList.remove('active');
+      document.getElementById('wish-modal').classList.remove('active');
     });
   }
 });
-
-function changeSlide(direction) {
-  if (!slides || totalSlides === 0) return;
-  slides[currentSlide].classList.remove('active');
-  currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
-  slides[currentSlide].classList.add('active');
-
-  const counter = document.getElementById('slide-counter');
-  if (counter) {
-    counter.innerText = `${currentSlide + 1} / ${totalSlides}`;
-  }
-}
 
 async function enableMic() {
   const status = document.getElementById('mic-status');
@@ -82,12 +54,12 @@ async function enableMic() {
     analyser.fftSize = 256;
     microphone.connect(analyser);
 
-    if (status) status.innerText = "🎙️ Mic active! BLOW directly into your microphone now!";
+    if (status) status.innerText = "🎙️ Mic active! BLOW into your mic now!";
     if (btn) btn.style.display = "none";
 
     listenForBlow();
   } catch (err) {
-    if (status) status.innerText = "Mic access blocked. Tap the flame directly to blow it out!";
+    if (status) status.innerText = "Mic blocked. Tap the flame directly to blow it out!";
   }
 }
 
@@ -122,33 +94,16 @@ function triggerBlowout() {
   if (flame) flame.classList.add('out');
   if (status) status.innerText = "✨ Wish granted! ✨";
 
-  // Confetti Animation
   if (typeof confetti === 'function') {
     confetti({
       particleCount: 120,
       spread: 70,
       origin: { y: 0.7 },
-      colors: ['#f3d2cf', '#a4c3b2', '#ffda79', '#ffffff']
+      colors: ['#ff85a1', '#f7cad0', '#ffda79', '#ffffff']
     });
-
-    setTimeout(() => {
-      confetti({
-        particleCount: 60,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0 }
-      });
-      confetti({
-        particleCount: 60,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1 }
-      });
-    }, 350);
   }
 
-  // Show surprise pop-up message
   setTimeout(() => {
     if (modal) modal.classList.add('active');
-  }, 800);
+  }, 700);
 }
