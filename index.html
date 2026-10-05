@@ -10,7 +10,10 @@
 </head>
 <body>
 
-  <!-- Audio Element -->
+  <!-- Floating Petals Canvas Background -->
+  <canvas id="petals-canvas"></canvas>
+
+  <!-- Background Music -->
   <audio id="bg-music" loop preload="auto">
     <source src="song.mp3" type="audio/mpeg">
   </audio>
@@ -27,12 +30,11 @@
 
     <!-- SCREEN 2: PASSCODE KEYPAD -->
     <div class="screen" id="screen-passcode">
-      <div class="passcode-card">
+      <div class="card passcode-card tilt-card">
         <div class="card-flower">🌸</div>
         <h2 class="passcode-title">For my favorite person</h2>
         <p class="passcode-subtitle">Happiest Birthday ✨</p>
 
-        <!-- Pin Dots -->
         <div class="pin-dots">
           <span class="dot" id="dot-0"></span>
           <span class="dot" id="dot-1"></span>
@@ -42,7 +44,6 @@
 
         <p class="passcode-hint">Hint: What's the date today? 🗓️</p>
 
-        <!-- Keypad -->
         <div class="keypad">
           <button onclick="pressKey('1')">1</button>
           <button onclick="pressKey('2')">2</button>
@@ -62,7 +63,7 @@
 
     <!-- SCREEN 3: INTRO SURPRISE QUESTION -->
     <div class="screen" id="screen-intro">
-      <div class="card intro-card">
+      <div class="card intro-card tilt-card">
         <div class="decorative-hearts">🌸 🤍 🌸</div>
         <h1 class="question-title">ARE YOU READY FOR A LITTLE SURPRISE? 👀</h1>
         <div class="btn-group">
@@ -73,42 +74,102 @@
       </div>
     </div>
 
-    <!-- SCREEN 4: STACKED PHOTO DECK -->
+    <!-- SCREEN 4: 3D FLIP STACKED PHOTO DECK -->
     <div class="screen" id="screen-photos">
-      <div class="card photo-deck-card">
-        <h2 class="section-title">The Prettiest Human 📸</h2>
-        <p class="deck-subtitle">Tap or swipe the card to see the next moment ✨</p>
+      <div class="card photo-deck-card tilt-card">
+        <h2 class="section-title">Beautiful Memories 📸</h2>
+        <p class="deck-subtitle">Tap photo to flip 🔄 | Tap 'Swipe ➔' to see next</p>
 
         <div class="card-stack" id="card-stack">
           
-          <!-- Card 5 (Bottom) -->
-          <div class="stacked-card" onclick="nextPhotoCard()">
-            <div class="photo-wrapper"><img src="photo5.jpg" alt="Suh 5"></div>
-            <p class="card-caption">"Even the moon would take a step back next to this."</p>
+          <!-- Card 5 -->
+          <div class="stacked-card" id="scard-5">
+            <div class="card-inner" onclick="flipCard(this)">
+              <div class="card-front">
+                <div class="photo-wrapper"><img src="photo5.jpg" alt="Suh 5"></div>
+                <p class="card-caption">"Even the moon would take a step back next to this."</p>
+                <span class="flip-hint">🔄 Tap photo to flip memory</span>
+              </div>
+              <div class="card-back">
+                <div class="back-content">
+                  <h3>Memory #5 🌙</h3>
+                  <p>A constant reminder of how effortlessly you brighten up every single place you walk into.</p>
+                </div>
+              </div>
+            </div>
+            <button class="btn-swipe-card" onclick="swipeTopCard(event, 'scard-5')">Swipe Next ➔</button>
           </div>
 
           <!-- Card 4 -->
-          <div class="stacked-card" onclick="nextPhotoCard()">
-            <div class="photo-wrapper"><img src="photo4.jpg" alt="Suh 4"></div>
-            <p class="card-caption">"Only at the 4th slide and I'm already lost for words."</p>
+          <div class="stacked-card" id="scard-4">
+            <div class="card-inner" onclick="flipCard(this)">
+              <div class="card-front">
+                <div class="photo-wrapper"><img src="photo4.jpg" alt="Suh 4"></div>
+                <p class="card-caption">"Only at the 4th slide and I'm already lost for words."</p>
+                <span class="flip-hint">🔄 Tap photo to flip memory</span>
+              </div>
+              <div class="card-back">
+                <div class="back-content">
+                  <h3>Memory #4 ✨</h3>
+                  <p>Literally no words needed here. Pure good vibes and timeless energy!</p>
+                </div>
+              </div>
+            </div>
+            <button class="btn-swipe-card" onclick="swipeTopCard(event, 'scard-4')">Swipe Next ➔</button>
           </div>
 
           <!-- Card 3 -->
-          <div class="stacked-card" onclick="nextPhotoCard()">
-            <div class="photo-wrapper"><img src="photo3.jpg" alt="Suh 3"></div>
-            <p class="card-caption">"The 8th wonder of the world."</p>
+          <div class="stacked-card" id="scard-3">
+            <div class="card-inner" onclick="flipCard(this)">
+              <div class="card-front">
+                <div class="photo-wrapper"><img src="photo3.jpg" alt="Suh 3"></div>
+                <p class="card-caption">"The 8th wonder of the world."</p>
+                <span class="flip-hint">🔄 Tap photo to flip memory</span>
+              </div>
+              <div class="card-back">
+                <div class="back-content">
+                  <h3>Memory #3 🏛️</h3>
+                  <p>Undisputed main character energy! Keep shining always!</p>
+                </div>
+              </div>
+            </div>
+            <button class="btn-swipe-card" onclick="swipeTopCard(event, 'scard-3')">Swipe Next ➔</button>
           </div>
 
           <!-- Card 2 -->
-          <div class="stacked-card" onclick="nextPhotoCard()">
-            <div class="photo-wrapper"><img src="photo2.jpg" alt="Suh 2"></div>
-            <p class="card-caption">"A smile that could end any war."</p>
+          <div class="stacked-card" id="scard-2">
+            <div class="card-inner" onclick="flipCard(this)">
+              <div class="card-front">
+                <div class="photo-wrapper"><img src="photo2.jpg" alt="Suh 2"></div>
+                <p class="card-caption">"A smile that could end any war."</p>
+                <span class="flip-hint">🔄 Tap photo to flip memory</span>
+              </div>
+              <div class="card-back">
+                <div class="back-content">
+                  <h3>Memory #2 😊</h3>
+                  <p>Your smile genuinely has the best contagious positivity!</p>
+                </div>
+              </div>
+            </div>
+            <button class="btn-swipe-card" onclick="swipeTopCard(event, 'scard-2')">Swipe Next ➔</button>
           </div>
 
-          <!-- Card 1 (Top) -->
-          <div class="stacked-card" onclick="nextPhotoCard()">
-            <div class="photo-wrapper"><img src="photo1.jpg" alt="Suh 1"></div>
-            <p class="card-caption">"The only goddess I'm a theist for."</p>
+          <!-- Card 1 -->
+          <div class="stacked-card" id="scard-1">
+            <div class="card-inner" onclick="flipCard(this)">
+              <div class="card-front">
+                <div class="photo-wrapper"><img src="photo1.jpg" alt="Suh 1"></div>
+                <p class="card-caption">"The only goddess I'm a theist for."</p>
+                <span class="flip-hint">🔄 Tap photo to flip memory</span>
+              </div>
+              <div class="card-back">
+                <div class="back-content">
+                  <h3>Memory #1 🌸</h3>
+                  <p>Starting off with one of the most aesthetic pictures ever taken.</p>
+                </div>
+              </div>
+            </div>
+            <button class="btn-swipe-card" onclick="swipeTopCard(event, 'scard-1')">Swipe Next ➔</button>
           </div>
 
         </div>
@@ -117,32 +178,72 @@
       </div>
     </div>
 
-    <!-- SCREEN 5: ENVELOPE & LETTER -->
+    <!-- SCREEN 5: ENVELOPE, LETTER & VOICE NOTE -->
     <div class="screen" id="screen-envelope">
-      <div class="card envelope-card">
+      <div class="card envelope-card tilt-card">
         <h2 class="section-title">A Letter, Just For You ✉️</h2>
         <p class="envelope-subtitle">Tap the envelope to open</p>
 
         <div class="interactive-envelope" onclick="openEnvelope()">
-          <div class="envelope-flap"></div>
           <div class="envelope-seal">🌸</div>
         </div>
 
-        <!-- Letter Box -->
         <div class="letter-scroll" id="letter-scroll">
           <h3 class="letter-header">Happiest birthday Suhani,</h3>
           <p class="letter-body">
             Talking to you is always the best part of my routine.<br><br>
             My biggest wish for you today (and always) is simple: to see you happy, smiling, and feeling as special as you truly are to me. Have the most amazing birthday! 🤍
           </p>
-          <button class="btn-next" onclick="goToScreen('screen-cake')">Make a Wish 🎂 ➔</button>
+
+          <button class="btn-next" onclick="goToScreen('screen-coupons')">Claim Your Birthday Perks 🎟️ ➔</button>
         </div>
       </div>
     </div>
 
-    <!-- SCREEN 6: CAKE BLOWOUT & MUSIC PLAYER -->
+    <!-- SCREEN 6: SCRATCH-OFF COUPONS -->
+    <div class="screen" id="screen-coupons">
+      <div class="card coupon-card tilt-card">
+        <h2 class="section-title">Scratch & Claim 🎁</h2>
+        <p class="deck-subtitle">Scratch with your finger to reveal your birthday coupons!</p>
+
+        <div class="coupons-grid">
+          
+          <!-- Coupon 1 -->
+          <div class="scratch-container">
+            <div class="scratch-reward">
+              <span class="reward-icon">☕</span>
+              <p class="reward-text">1x Free Coffee / Treat On Me!</p>
+            </div>
+            <canvas class="scratch-canvas" id="canvas-1"></canvas>
+          </div>
+
+          <!-- Coupon 2 -->
+          <div class="scratch-container">
+            <div class="scratch-reward">
+              <span class="reward-icon">🎬</span>
+              <p class="reward-text">1x Movie / Hangout Pick!</p>
+            </div>
+            <canvas class="scratch-canvas" id="canvas-2"></canvas>
+          </div>
+
+          <!-- Coupon 3 -->
+          <div class="scratch-container">
+            <div class="scratch-reward">
+              <span class="reward-icon">🗣️</span>
+              <p class="reward-text">1x Unlimited Rant Session!</p>
+            </div>
+            <canvas class="scratch-canvas" id="canvas-3"></canvas>
+          </div>
+
+        </div>
+
+        <button class="btn-next highlight" style="margin-top:20px;" onclick="goToScreen('screen-cake')">Make A Wish 🎂 ➔</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 7: CAKE BLOWOUT & MUSIC PLAYER -->
     <div class="screen" id="screen-cake">
-      <div class="card cake-card">
+      <div class="card cake-card tilt-card">
         <h2 class="section-title">Make a Wish 🎂</h2>
         <p class="cake-instruction">Blow into your mic or tap the flame!</p>
 
@@ -157,13 +258,12 @@
         <div class="status-box" id="mic-status">Tap below to activate mic 🎙️</div>
         <button class="btn-mic" id="mic-btn">Activate Mic & Blow Candle ✨</button>
 
-        <!-- Music Player Widget -->
         <div class="music-player-widget">
           <div class="music-info">
             <span class="music-icon">🎵</span>
             <div class="music-text">
-              <p class="song-title" id="song-title">O Rangrez</p>
-              <p class="artist-name">Shreya Ghoshal, Javed Bashir</p>
+              <p class="song-title" id="song-title">Line Without a Hook</p>
+              <p class="artist-name">Ricky Montgomery</p>
             </div>
           </div>
           <button class="btn-play-pause" id="audio-toggle-btn" onclick="toggleAudio()">⏸️</button>
