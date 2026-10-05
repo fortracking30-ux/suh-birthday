@@ -1,16 +1,68 @@
+let currentSlide = 0;
+let slides;
+let totalSlides = 0;
+
 let audioContext;
 let analyser;
 let microphone;
 let isBlown = false;
 
+document.addEventListener('DOMContentLoaded', () => {
+  slides = document.querySelectorAll('.slide');
+  totalSlides = slides.length;
+
+  const welcomeOverlay = document.getElementById('welcome-overlay');
+  const startBtn = document.getElementById('start-btn');
+  const music = document.getElementById('bg-music');
+
+  if (startBtn) {
+    startBtn.addEventListener('click', () => {
+      if (music) {
+        music.currentTime = 0;
+        music.play().catch(e => console.log("Audio play deferred:", e));
+      }
+      if (welcomeOverlay) {
+        welcomeOverlay.classList.add('hidden');
+      }
+    });
+  }
+
+  // Slideshow Controls
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
+  if (prevBtn) prevBtn.addEventListener('click', () => changeSlide(-1));
+  if (nextBtn) nextBtn.addEventListener('click', () => changeSlide(1));
+
+  // Blowout & Modal Logic
+  const micBtn = document.getElementById('mic-btn');
+  const flame = document.getElementById('candle-flame');
+  const closeModalBtn = document.getElementById('close-modal-btn');
+
+  if (micBtn) micBtn.addEventListener('click', enableMic);
+  if (flame) flame.addEventListener('click', triggerBlowout);
+  if (closeModalBtn) {
+    closeModalBtn.addEventListener('click', () => {
+      document.getElementById('wish-modal').classList.remove('active');
+    });
+  }
+});
+
+function changeSlide(direction) {
+  if (!slides || totalSlides === 0) return;
+  slides[currentSlide].classList.remove('active');
+  currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
+  slides[currentSlide].classList.add('active');
+  
+  const counter = document.getElementById('slide-counter');
+  if (counter) {
+    counter.innerText = `${currentSlide + 1} / ${totalSlides}`;
+  }
+}
+
 async function enableMic() {
   const status = document.getElementById('mic-status');
   const btn = document.getElementById('mic-btn');
-  const music = document.getElementById('bg-music');
-
-  if (music) {
-    music.play().catch(e => console.log("Audio playback waiting for interaction:", e));
-  }
 
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -21,12 +73,12 @@ async function enableMic() {
     analyser.fftSize = 256;
     microphone.connect(analyser);
 
-    if (status) status.innerText = "🎙️ Microphone active! BLOW directly into your mic now!";
+    if (status) status.innerText = "🎙️ Mic active! BLOW directly into your microphone now!";
     if (btn) btn.style.display = "none";
 
     listenForBlow();
   } catch (err) {
-    if (status) status.innerText = "Mic access denied. Tap the flame directly to blow it out!";
+    if (status) status.innerText = "Mic access blocked. Tap the flame directly to blow it out!";
   }
 }
 
@@ -56,9 +108,10 @@ function triggerBlowout() {
 
   const flame = document.getElementById('candle-flame');
   const status = document.getElementById('mic-status');
+  const modal = document.getElementById('wish-modal');
 
   if (flame) flame.classList.add('out');
-  if (status) status.innerText = "✨ Happy Birthday Suh! Wish granted! ✨";
+  if (status) status.innerText = "✨ Wish granted! ✨";
 
   // Confetti Blast
   confetti({
@@ -82,12 +135,9 @@ function triggerBlowout() {
       origin: { x: 1 }
     });
   }, 350);
+
+  // Show special message pop-up
+  setTimeout(() => {
+    if (modal) modal.classList.add('active');
+  }, 800);
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-  const btn = document.getElementById('mic-btn');
-  const flame = document.getElementById('candle-flame');
-
-  if (btn) btn.addEventListener('click', enableMic);
-  if (flame) flame.addEventListener('click', triggerBlowout);
-});
