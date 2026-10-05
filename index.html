@@ -76,12 +76,19 @@
 
     <!-- SCREEN 4: 3D FLIP STACKED PHOTO DECK -->
     <div class="screen" id="screen-photos">
-      <div class="card photo-deck-card tilt-card">
+      <div class="card photo-deck-card tilt-card" id="photo-deck-card">
         <h2 class="section-title">The Prettiest Human 📸</h2>
-        <p class="deck-subtitle">Tap photo to flip 🔄 | Tap 'Swipe ➔' to see next</p>
+        <p class="deck-subtitle" id="deck-sub">Tap photo to flip 🔄 | Tap 'Swipe ➔' to see next</p>
 
         <div class="card-stack" id="card-stack">
           
+          <!-- Lily Reveal Card (Shown after swiping all photos) -->
+          <div class="lily-completion-card" id="lily-completion-card">
+            <div class="lily-icon">⚜️ 🌸 ⚜️</div>
+            <h3>That's all the memories for now!</h3>
+            <p>Ready to read your birthday message? 💌</p>
+          </div>
+
           <!-- Card 5 -->
           <div class="stacked-card" id="scard-5">
             <div class="card-inner" onclick="flipCard(this)">
@@ -178,7 +185,7 @@
       </div>
     </div>
 
-    <!-- SCREEN 5: ENVELOPE, LETTER & VOICE NOTE -->
+    <!-- SCREEN 5: ENVELOPE & LETTER -->
     <div class="screen" id="screen-envelope">
       <div class="card envelope-card tilt-card">
         <h2 class="section-title">A Letter, Just For You ✉️</h2>
@@ -212,7 +219,7 @@
           <div class="scratch-container">
             <div class="scratch-reward">
               <span class="reward-icon">☕</span>
-              <p class="reward-text">1x Free Coffee / Treat On Me!</p>
+              <p class="reward-text" id="perk-text-1">1x Free Coffee / Treat On Me!</p>
             </div>
             <canvas class="scratch-canvas" id="canvas-1"></canvas>
           </div>
@@ -221,7 +228,7 @@
           <div class="scratch-container">
             <div class="scratch-reward">
               <span class="reward-icon">🎬</span>
-              <p class="reward-text">1x Movie / Hangout Pick!</p>
+              <p class="reward-text" id="perk-text-2">1x Movie / Hangout Pick!</p>
             </div>
             <canvas class="scratch-canvas" id="canvas-2"></canvas>
           </div>
@@ -230,7 +237,7 @@
           <div class="scratch-container">
             <div class="scratch-reward">
               <span class="reward-icon">🗣️</span>
-              <p class="reward-text">1x Unlimited Rant Session!</p>
+              <p class="reward-text" id="perk-text-3">1x Unlimited Rant Session!</p>
             </div>
             <canvas class="scratch-canvas" id="canvas-3"></canvas>
           </div>
