@@ -10,41 +10,103 @@
 </head>
 <body>
 
-  <!-- Background Music -->
-  <audio id="bg-music" loop>
+  <!-- Audio Element -->
+  <audio id="bg-music" loop preload="auto">
     <source src="song.mp3" type="audio/mpeg">
   </audio>
 
+  <!-- Initial Entry Overlay to guarantee music plays on touch -->
+  <div class="welcome-overlay" id="welcome-overlay">
+    <div class="welcome-card">
+      <div class="lily-header">🪻 🌸 🪻</div>
+      <h1>A Special Wish For Suh</h1>
+      <p>Tap below to step inside ✨</p>
+      <button class="btn-primary" id="start-btn">Open Birthday Wish 💌</button>
+    </div>
+  </div>
+
   <div class="container">
     
-    <!-- HERO SECTION -->
-    <section class="hero-section">
-      <div class="lily-icon-header">🪻 🌸 🪻</div>
-      <span class="subtitle">A Special Birthday Wish For</span>
-      <h1 class="hero-title">Suh</h1>
+    <!-- HERO HEADER -->
+    <header class="hero-section">
+      <span class="subtitle">Celebration of You</span>
+      <h1 class="hero-title">Happy Birthday, Suh</h1>
       <p class="hero-tagline">Pure, gentle, and blooming every single day ✨</p>
-      <div class="scroll-indicator">Scroll down <span>↓</span></div>
-    </section>
+    </header>
 
-    <!-- PHOTO GALLERY GRID -->
-    <section class="gallery-section">
-      <h2 class="section-title">Memories & Bloom 📸</h2>
-      <div class="gallery-grid">
-        <div class="photo-card"><img src="photo1.jpg" alt="Suh 1"><div class="frame-tag">Pure</div></div>
-        <div class="photo-card"><img src="photo2.jpg" alt="Suh 2"><div class="frame-tag">Grace</div></div>
-        <div class="photo-card"><img src="photo3.jpg" alt="Suh 3"><div class="frame-tag">Joy</div></div>
-        <div class="photo-card"><img src="photo4.jpg" alt="Suh 4"><div class="frame-tag">Shine</div></div>
-        <div class="photo-card"><img src="photo5.jpg" alt="Suh 5"><div class="frame-tag">Lily</div></div>
+    <!-- INTERACTIVE SLIDESHOW -->
+    <section class="slideshow-section">
+      <h2 class="section-title">Memories & Moments 📸</h2>
+      
+      <div class="slideshow-container">
+        
+        <!-- Slide 1 -->
+        <div class="slide active">
+          <div class="photo-card">
+            <img src="photo1.jpg" alt="Suh 1">
+          </div>
+          <div class="caption-card">
+            <p>"The only goddess I'm a theist for."</p>
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide">
+          <div class="photo-card">
+            <img src="photo2.jpg" alt="Suh 2">
+          </div>
+          <div class="caption-card">
+            <p>"A smile that could end any war."</p>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide">
+          <div class="photo-card">
+            <img src="photo3.jpg" alt="Suh 3">
+          </div>
+          <div class="caption-card">
+            <p>"The 8th wonder of the world."</p>
+          </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide">
+          <div class="photo-card">
+            <img src="photo4.jpg" alt="Suh 4">
+          </div>
+          <div class="caption-card">
+            <p>"Only at the 4th slide and I'm already lost for words."</p>
+          </div>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="slide">
+          <div class="photo-card">
+            <img src="photo5.jpg" alt="Suh 5">
+          </div>
+          <div class="caption-card">
+            <p>"Even the moon would take a step back next to this."</p>
+          </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="slideshow-controls">
+          <button class="nav-btn" id="prev-btn">❮ Prev</button>
+          <span class="slide-counter" id="slide-counter">1 / 5</span>
+          <button class="nav-btn" id="next-btn">Next ❯</button>
+        </div>
+
       </div>
     </section>
 
-    <!-- LETTER NOTE SECTION -->
+    <!-- LETTER SECTION -->
     <section class="letter-section">
       <div class="letter-card">
         <div class="floral-corner top-left">⚜️</div>
         <div class="floral-corner bottom-right">⚜️</div>
         <h3 class="letter-heading">Dearest Suh,</h3>
-        <p class="letter-body">"Happy birthday to the human form of lillies... keep shining sweetie! God bless you! 🤍"</p>
+        <p class="letter-body">"Happy birthday to the human form of lilies... keep shining sweetie! God bless you! 🤍"</p>
         <div class="letter-signoff">— With Endless Love</div>
       </div>
     </section>
@@ -62,13 +124,23 @@
         <div class="cake-base"></div>
       </div>
 
-      <div class="status-box" id="mic-status">Tap below to activate microphone detection 🎙️</div>
+      <div class="status-box" id="mic-status">Tap below to turn on blow detection 🎙️</div>
       <button class="btn-primary" id="mic-btn">Activate Mic & Blow Candle ✨</button>
     </section>
 
   </div>
 
+  <!-- SPECIAL MODAL FOR CANDLE BLOWOUT SURPRISE -->
+  <div class="modal-overlay" id="wish-modal">
+    <div class="modal-card">
+      <div class="modal-header">🎉 Wish Granted! 🎉</div>
+      <p class="modal-body">
+        Hey Suhh! Hope this made you feel a little special... Happy birthday again! Keep smiling! 🤍
+      </p>
+      <button class="btn-primary" id="close-modal-btn">Close & Enjoy ❤️</button>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
- 
