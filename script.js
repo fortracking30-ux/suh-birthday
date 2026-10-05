@@ -16,6 +16,9 @@ function goToScreen(screenId) {
   if (target) {
     target.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (screenId === 'screen-coupons') {
+      initScratchCards();
+    }
   }
 }
 
@@ -74,15 +77,17 @@ function playfulNo() {
   goToScreen('screen-photos');
 }
 
-/* Stacked Photo Cards Swipe */
-function nextPhotoCard() {
-  const stack = document.getElementById('card-stack');
-  const cards = stack.getElementsByClassName('stacked-card');
-  const visibleCards = Array.from(cards).filter(c => !c.classList.contains('swiped'));
+/* 3D Flip Card */
+function flipCard(cardInner) {
+  cardInner.classList.toggle('flipped');
+}
 
-  if (visibleCards.length > 0) {
-    const topCard = visibleCards[visibleCards.length - 1];
-    topCard.classList.add('swiped');
+/* Swipe Photo Deck */
+function swipeTopCard(e, cardId) {
+  e.stopPropagation();
+  const card = document.getElementById(cardId);
+  if (card && !card.classList.contains('swiped')) {
+    card.classList.add('swiped');
     swipedCards++;
 
     if (swipedCards >= totalCards) {
@@ -94,6 +99,109 @@ function nextPhotoCard() {
 function openEnvelope() {
   const scroll = document.getElementById('letter-scroll');
   if (scroll) scroll.classList.add('active');
+}
+
+/* Scratch-Off Canvas Logic */
+function initScratchCards() {
+  ['canvas-1', 'canvas-2', 'canvas-3'].forEach(id => {
+    const canvas = document.getElementById(id);
+    if (!canvas || canvas.dataset.inited) return;
+    canvas.dataset.inited = "true";
+
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
+    ctx.fillStyle = '#f8bbd0';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.font = '14px Poppins, sans-serif';
+    ctx.fillStyle = '#880e4f';
+    ctx.textAlign = 'center';
+    ctx.fillText('✨ Scratch to Reveal ✨', canvas.width / 2, canvas.height / 2 + 5);
+
+    let isDrawing = false;
+
+    function scratch(e) {
+      if (!isDrawing) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+      const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.arc(x, y, 18, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ['mousedown', 'touchstart'].forEach(evt => canvas.addEventListener(evt, (e) => { isDrawing = true; scratch(e); }));
+    ['mousemove', 'touchmove'].forEach(evt => canvas.addEventListener(evt, scratch));
+    ['mouseup', 'touchend'].forEach(evt => canvas.addEventListener(evt, () => isDrawing = false));
+  });
+}
+
+/* Parallax Tilt Physics */
+document.addEventListener('mousemove', (e) => {
+  const cards = document.querySelectorAll('.tilt-card');
+  const x = (window.innerWidth / 2 - e.pageX) / 30;
+  const y = (window.innerHeight / 2 - e.pageY) / 30;
+
+  cards.forEach(card => {
+    card.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+  });
+});
+
+/* Floating Petals Physics */
+function initPetals() {
+  const canvas = document.getElementById('petals-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
+
+  const petals = Array.from({ length: 25 }, () => ({
+    x: Math.random() * width,
+    y: Math.random() * height,
+    size: Math.random() * 8 + 6,
+    speedY: Math.random() * 1 + 0.5,
+    speedX: Math.random() * 0.5 - 0.25,
+    rotation: Math.random() * 360,
+    rotSpeed: Math.random() * 2 - 1
+  }));
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+
+    petals.forEach(p => {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.rotation * Math.PI) / 180);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, p.size, p.size / 2, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      p.y += p.speedY;
+      p.x += p.speedX;
+      p.rotation += p.rotSpeed;
+
+      if (p.y > height) {
+        p.y = -10;
+        p.x = Math.random() * width;
+      }
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
 }
 
 /* Music Player Controls */
@@ -114,6 +222,8 @@ function toggleAudio() {
 
 /* Candle Blowout */
 document.addEventListener('DOMContentLoaded', () => {
+  initPetals();
+
   const micBtn = document.getElementById('mic-btn');
   const flame = document.getElementById('candle-flame');
 
