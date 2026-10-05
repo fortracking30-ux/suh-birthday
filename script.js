@@ -91,6 +91,10 @@ function swipeTopCard(e, cardId) {
     swipedCards++;
 
     if (swipedCards >= totalCards) {
+      const stack = document.getElementById('card-stack');
+      const sub = document.getElementById('deck-sub');
+      if (stack) stack.classList.add('shrink');
+      if (sub) sub.style.display = 'none';
       document.getElementById('photo-finish-btn').style.display = 'block';
     }
   }
@@ -244,7 +248,7 @@ async function enableMic() {
     analyser.fftSize = 256;
     microphone.connect(analyser);
 
-    if (status) status.innerText = "🎙️ Mic active! BLOW into your mic now!";
+    if (status) status.innerText = "🎙️️ Mic active! BLOW into your mic now!";
     if (btn) btn.style.display = "none";
 
     listenForBlow();
