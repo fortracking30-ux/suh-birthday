@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Happy Birthday Suh! 🌸</title>
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
@@ -15,129 +15,148 @@
     <source src="song.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Initial Entry Overlay to guarantee music plays on touch -->
-  <div class="welcome-overlay" id="welcome-overlay">
-    <div class="welcome-card">
-      <div class="lily-header">🪻 🌸 🪻</div>
-      <h1>A Special Wish For Suh</h1>
-      <p>Tap below to step inside ✨</p>
-      <button class="btn-primary" id="start-btn">Open Birthday Wish 💌</button>
+  <!-- BACKGROUND DECORATIONS -->
+  <div class="bg-petals"></div>
+
+  <div class="app-container">
+
+    <!-- PAGE 0: INTRO QUESTION -->
+    <div class="page active" id="page-0">
+      <div class="card intro-card">
+        <div class="decorative-hearts">🌸 🤍 🌸</div>
+        <h1 class="question-title">ARE YOU READY FOR A LITTLE SURPRISE? 👀</h1>
+        <div class="btn-group">
+          <button class="btn-choice yes-btn" onclick="goToPage(1)">Yes ❤️️</button>
+          <button class="btn-choice yes-btn" onclick="goToPage(1)">Of Course 😍</button>
+          <button class="btn-choice no-btn" id="no-btn" onclick="playfulNo()">No 😂</button>
+        </div>
+      </div>
     </div>
+
+    <!-- PAGE 1: PHOTO 1 -->
+    <div class="page" id="page-1">
+      <div class="card story-card">
+        <div class="page-badge">Page 1 / 5</div>
+        <div class="photo-wrapper">
+          <img src="photo1.jpg" alt="Suh 1">
+        </div>
+        <div class="caption-wrapper">
+          <p class="caption-text">"The only goddess I'm a theist for."</p>
+        </div>
+        <button class="btn-next" onclick="goToPage(2)">Next Surprise ➔</button>
+      </div>
+    </div>
+
+    <!-- PAGE 2: PHOTO 2 -->
+    <div class="page" id="page-2">
+      <div class="card story-card">
+        <div class="page-badge">Page 2 / 5</div>
+        <div class="photo-wrapper">
+          <img src="photo2.jpg" alt="Suh 2">
+        </div>
+        <div class="caption-wrapper">
+          <p class="caption-text">"A smile that could end any war."</p>
+        </div>
+        <div class="btn-row">
+          <button class="btn-back" onclick="goToPage(1)">❮ Back</button>
+          <button class="btn-next" onclick="goToPage(3)">Next ➔</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 3: PHOTO 3 -->
+    <div class="page" id="page-3">
+      <div class="card story-card">
+        <div class="page-badge">Page 3 / 5</div>
+        <div class="photo-wrapper">
+          <img src="photo3.jpg" alt="Suh 3">
+        </div>
+        <div class="caption-wrapper">
+          <p class="caption-text">"The 8th wonder of the world."</p>
+        </div>
+        <div class="btn-row">
+          <button class="btn-back" onclick="goToPage(2)">❮ Back</button>
+          <button class="btn-next" onclick="goToPage(4)">Next ➔</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 4: PHOTO 4 -->
+    <div class="page" id="page-4">
+      <div class="card story-card">
+        <div class="page-badge">Page 4 / 5</div>
+        <div class="photo-wrapper">
+          <img src="photo4.jpg" alt="Suh 4">
+        </div>
+        <div class="caption-wrapper">
+          <p class="caption-text">"Only at the 4th slide and I'm already lost for words."</p>
+        </div>
+        <div class="btn-row">
+          <button class="btn-back" onclick="goToPage(3)">❮ Back</button>
+          <button class="btn-next" onclick="goToPage(5)">Next ➔</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 5: PHOTO 5 -->
+    <div class="page" id="page-5">
+      <div class="card story-card">
+        <div class="page-badge">Page 5 / 5</div>
+        <div class="photo-wrapper">
+          <img src="photo5.jpg" alt="Suh 5">
+        </div>
+        <div class="caption-wrapper">
+          <p class="caption-text">"Even the moon would take a step back next to this."</p>
+        </div>
+        <div class="btn-row">
+          <button class="btn-back" onclick="goToPage(4)">❮ Back</button>
+          <button class="btn-next highlight" onclick="goToPage(6)">Make A Wish 🎂</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 6: LETTER & CAKE BLOWOUT -->
+    <div class="page" id="page-6">
+      <div class="card final-card">
+        <header class="hero-header">
+          <span class="sub-title">Happy Birthday</span>
+          <h1 class="main-title">Dearest Suh 🌸</h1>
+        </header>
+
+        <div class="letter-box">
+          <p class="letter-content">
+            "Happy birthday to the human form of lilies... keep shining sweetie! God bless you! 🤍"
+          </p>
+        </div>
+
+        <div class="cake-area">
+          <h2 class="cake-title">Make a Wish 🎂</h2>
+          <p class="cake-instruction">Blow into your mic or tap the flame!</p>
+
+          <div class="interactive-cake">
+            <div class="candle">
+              <div class="flame" id="candle-flame"></div>
+            </div>
+            <div class="cake-top"></div>
+            <div class="cake-base"></div>
+          </div>
+
+          <div class="status-box" id="mic-status">Tap below to activate mic 🎙️</div>
+          <button class="btn-mic" id="mic-btn">Activate Mic & Blow Candle ✨</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <div class="container">
-    
-    <!-- HERO HEADER -->
-    <header class="hero-section">
-      <span class="subtitle">Celebration of You</span>
-      <h1 class="hero-title">Happy Birthday, Suh</h1>
-      <p class="hero-tagline">Pure, gentle, and blooming every single day ✨</p>
-    </header>
-
-    <!-- INTERACTIVE SLIDESHOW -->
-    <section class="slideshow-section">
-      <h2 class="section-title">Memories & Moments 📸</h2>
-      
-      <div class="slideshow-container">
-        
-        <!-- Slide 1 -->
-        <div class="slide active">
-          <div class="photo-card">
-            <img src="photo1.jpg" alt="Suh 1">
-          </div>
-          <div class="caption-card">
-            <p>"The only goddess I'm a theist for."</p>
-          </div>
-        </div>
-
-        <!-- Slide 2 -->
-        <div class="slide">
-          <div class="photo-card">
-            <img src="photo2.jpg" alt="Suh 2">
-          </div>
-          <div class="caption-card">
-            <p>"A smile that could end any war."</p>
-          </div>
-        </div>
-
-        <!-- Slide 3 -->
-        <div class="slide">
-          <div class="photo-card">
-            <img src="photo3.jpg" alt="Suh 3">
-          </div>
-          <div class="caption-card">
-            <p>"The 8th wonder of the world."</p>
-          </div>
-        </div>
-
-        <!-- Slide 4 -->
-        <div class="slide">
-          <div class="photo-card">
-            <img src="photo4.jpg" alt="Suh 4">
-          </div>
-          <div class="caption-card">
-            <p>"Only at the 4th slide and I'm already lost for words."</p>
-          </div>
-        </div>
-
-        <!-- Slide 5 -->
-        <div class="slide">
-          <div class="photo-card">
-            <img src="photo5.jpg" alt="Suh 5">
-          </div>
-          <div class="caption-card">
-            <p>"Even the moon would take a step back next to this."</p>
-          </div>
-        </div>
-
-        <!-- Navigation Controls -->
-        <div class="slideshow-controls">
-          <button class="nav-btn" id="prev-btn">❮ Prev</button>
-          <span class="slide-counter" id="slide-counter">1 / 5</span>
-          <button class="nav-btn" id="next-btn">Next ❯</button>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- LETTER SECTION -->
-    <section class="letter-section">
-      <div class="letter-card">
-        <div class="floral-corner top-left">⚜️</div>
-        <div class="floral-corner bottom-right">⚜️</div>
-        <h3 class="letter-heading">Dearest Suh,</h3>
-        <p class="letter-body">"Happy birthday to the human form of lilies... keep shining sweetie! God bless you! 🤍"</p>
-        <div class="letter-signoff">— With Endless Love</div>
-      </div>
-    </section>
-
-    <!-- CAKE & MIC CANDLE BLOW SECTION -->
-    <section class="cake-section">
-      <h2 class="section-title">Make a Wish 🎂</h2>
-      <p class="cake-subtitle">Blow into your microphone (or tap the flame) to blow out the candle!</p>
-
-      <div class="interactive-cake">
-        <div class="candle">
-          <div class="flame" id="candle-flame"></div>
-        </div>
-        <div class="cake-top"></div>
-        <div class="cake-base"></div>
-      </div>
-
-      <div class="status-box" id="mic-status">Tap below to turn on blow detection 🎙️</div>
-      <button class="btn-primary" id="mic-btn">Activate Mic & Blow Candle ✨</button>
-    </section>
-
-  </div>
-
-  <!-- SPECIAL MODAL FOR CANDLE BLOWOUT SURPRISE -->
+  <!-- SURPRISE POPUP MODAL -->
   <div class="modal-overlay" id="wish-modal">
     <div class="modal-card">
       <div class="modal-header">🎉 Wish Granted! 🎉</div>
       <p class="modal-body">
         Hey Suhh! Hope this made you feel a little special... Happy birthday again! Keep smiling! 🤍
       </p>
-      <button class="btn-primary" id="close-modal-btn">Close & Enjoy ❤️</button>
+      <button class="btn-close-modal" id="close-modal-btn">Close & Enjoy ❤️</button>
     </div>
   </div>
 
