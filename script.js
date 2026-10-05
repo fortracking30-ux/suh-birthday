@@ -17,24 +17,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (startBtn) {
     startBtn.addEventListener('click', () => {
-      if (music) {
-        music.currentTime = 0;
-        music.play().catch(e => console.log("Audio play deferred:", e));
-      }
+      // Hide welcome overlay immediately on click
       if (welcomeOverlay) {
         welcomeOverlay.classList.add('hidden');
+      }
+
+      // Play audio gracefully without locking up
+      if (music) {
+        music.currentTime = 0;
+        const playPromise = music.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.log("Audio playback blocked or file missing:", error);
+          });
+        }
       }
     });
   }
 
-  // Slideshow Controls
+  // Slideshow Navigation
   const prevBtn = document.getElementById('prev-btn');
   const nextBtn = document.getElementById('next-btn');
 
   if (prevBtn) prevBtn.addEventListener('click', () => changeSlide(-1));
   if (nextBtn) nextBtn.addEventListener('click', () => changeSlide(1));
 
-  // Blowout & Modal Logic
+  // Candle & Pop-up Modal Controls
   const micBtn = document.getElementById('mic-btn');
   const flame = document.getElementById('candle-flame');
   const closeModalBtn = document.getElementById('close-modal-btn');
@@ -43,7 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (flame) flame.addEventListener('click', triggerBlowout);
   if (closeModalBtn) {
     closeModalBtn.addEventListener('click', () => {
-      document.getElementById('wish-modal').classList.remove('active');
+      const modal = document.getElementById('wish-modal');
+      if (modal) modal.classList.remove('active');
     });
   }
 });
@@ -53,7 +62,7 @@ function changeSlide(direction) {
   slides[currentSlide].classList.remove('active');
   currentSlide = (currentSlide + direction + totalSlides) % totalSlides;
   slides[currentSlide].classList.add('active');
-  
+
   const counter = document.getElementById('slide-counter');
   if (counter) {
     counter.innerText = `${currentSlide + 1} / ${totalSlides}`;
@@ -113,30 +122,32 @@ function triggerBlowout() {
   if (flame) flame.classList.add('out');
   if (status) status.innerText = "✨ Wish granted! ✨";
 
-  // Confetti Blast
-  confetti({
-    particleCount: 120,
-    spread: 70,
-    origin: { y: 0.7 },
-    colors: ['#f3d2cf', '#a4c3b2', '#ffda79', '#ffffff']
-  });
-
-  setTimeout(() => {
+  // Confetti Animation
+  if (typeof confetti === 'function') {
     confetti({
-      particleCount: 60,
-      angle: 60,
-      spread: 55,
-      origin: { x: 0 }
+      particleCount: 120,
+      spread: 70,
+      origin: { y: 0.7 },
+      colors: ['#f3d2cf', '#a4c3b2', '#ffda79', '#ffffff']
     });
-    confetti({
-      particleCount: 60,
-      angle: 120,
-      spread: 55,
-      origin: { x: 1 }
-    });
-  }, 350);
 
-  // Show special message pop-up
+    setTimeout(() => {
+      confetti({
+        particleCount: 60,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 }
+      });
+      confetti({
+        particleCount: 60,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 }
+      });
+    }, 350);
+  }
+
+  // Show surprise pop-up message
   setTimeout(() => {
     if (modal) modal.classList.add('active');
   }, 800);
