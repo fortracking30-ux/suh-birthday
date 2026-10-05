@@ -8,6 +8,34 @@ let analyser;
 let microphone;
 let isBlown = false;
 
+/* Jar Notes Pool - Adjusted for online/remote friendship */
+const jarNotes = [
+  "✨ Your laugh and sense of humor always make my day brighter through every text.",
+  "🌸 You bring the absolute best effortless vibes to every single conversation.",
+  "✨ Talking to you is easily one of the best parts of my routine.",
+  "🌸 You have this incredible natural talent for making long chats feel like minutes.",
+  "✨ Undisputed 10/10 main character energy, always!",
+  "🌸 Never change how sweet, hilarious, and genuine you are across every message!"
+];
+let unusedNotes = [...jarNotes];
+
+function drawJarNote() {
+  if (unusedNotes.length === 0) {
+    unusedNotes = [...jarNotes];
+  }
+  const randomIndex = Math.floor(Math.random() * unusedNotes.length);
+  const note = unusedNotes.splice(randomIndex, 1)[0];
+
+  const display = document.getElementById('jar-note-text');
+  if (display) {
+    display.style.opacity = 0;
+    setTimeout(() => {
+      display.innerText = `"${note}"`;
+      display.style.opacity = 1;
+    }, 150);
+  }
+}
+
 function goToScreen(screenId) {
   const screens = document.querySelectorAll('.screen');
   screens.forEach(s => s.classList.remove('active'));
@@ -248,7 +276,7 @@ async function enableMic() {
     analyser.fftSize = 256;
     microphone.connect(analyser);
 
-    if (status) status.innerText = "🎙️️ Mic active! BLOW into your mic now!";
+    if (status) status.innerText = "🎙️ Mic active! BLOW into your mic now!";
     if (btn) btn.style.display = "none";
 
     listenForBlow();
