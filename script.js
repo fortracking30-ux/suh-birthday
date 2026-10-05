@@ -8,7 +8,56 @@ let analyser;
 let microphone;
 let isBlown = false;
 
-/* Jar Notes Pool - Adjusted for online/remote friendship */
+/* Sound Micro-Feedback (Web Audio API Synthesizer) */
+function playSound(type) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    if (type === 'click') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(600, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.05);
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.05);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.05);
+    } else if (type === 'flip') {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(300, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(500, ctx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.08);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.08);
+    } else if (type === 'pop') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(400, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.1);
+    }
+  } catch (e) {}
+}
+
+/* Global Heart Sparkle Effect on Click/Tap */
+document.addEventListener('click', (e) => {
+  const sparkle = document.createElement('div');
+  sparkle.className = 'click-sparkle';
+  sparkle.innerText = Math.random() > 0.5 ? '🌸' : '✨';
+  sparkle.style.left = e.clientX + 'px';
+  sparkle.style.top = e.clientY + 'px';
+  document.body.appendChild(sparkle);
+
+  setTimeout(() => sparkle.remove(), 800);
+});
+
+/* Jar Notes Pool */
 const jarNotes = [
   "✨ Your laugh and sense of humor always make my day brighter through every text.",
   "🌸 You bring the absolute best effortless vibes to every single conversation.",
@@ -20,6 +69,7 @@ const jarNotes = [
 let unusedNotes = [...jarNotes];
 
 function drawJarNote() {
+  playSound('pop');
   if (unusedNotes.length === 0) {
     unusedNotes = [...jarNotes];
   }
@@ -37,6 +87,7 @@ function drawJarNote() {
 }
 
 function goToScreen(screenId) {
+  playSound('click');
   const screens = document.querySelectorAll('.screen');
   screens.forEach(s => s.classList.remove('active'));
 
@@ -51,6 +102,7 @@ function goToScreen(screenId) {
 }
 
 function unlockBlossom() {
+  playSound('pop');
   const music = document.getElementById('bg-music');
   if (music) {
     music.play().catch(e => console.log("Audio waiting for user action:", e));
@@ -60,6 +112,7 @@ function unlockBlossom() {
 
 /* Keypad Logic */
 function pressKey(num) {
+  playSound('click');
   if (enteredPin.length < 4) {
     enteredPin += num;
     updateDots();
@@ -71,6 +124,7 @@ function pressKey(num) {
 }
 
 function deleteKey() {
+  playSound('click');
   if (enteredPin.length > 0) {
     enteredPin = enteredPin.slice(0, -1);
     updateDots();
@@ -92,6 +146,7 @@ function updateDots() {
 
 function checkPin() {
   if (enteredPin === correctPin) {
+    playSound('pop');
     goToScreen('screen-intro');
   } else {
     alert("Incorrect passcode! Check the hint 😉");
@@ -101,18 +156,21 @@ function checkPin() {
 }
 
 function playfulNo() {
+  playSound('click');
   alert("Wrong choice! Tapping Yes for you 😉❤️");
   goToScreen('screen-photos');
 }
 
 /* 3D Flip Card */
 function flipCard(cardInner) {
+  playSound('flip');
   cardInner.classList.toggle('flipped');
 }
 
 /* Swipe Photo Deck */
 function swipeTopCard(e, cardId) {
   e.stopPropagation();
+  playSound('flip');
   const card = document.getElementById(cardId);
   if (card && !card.classList.contains('swiped')) {
     card.classList.add('swiped');
@@ -129,6 +187,7 @@ function swipeTopCard(e, cardId) {
 }
 
 function openEnvelope() {
+  playSound('pop');
   const scroll = document.getElementById('letter-scroll');
   if (scroll) scroll.classList.add('active');
 }
@@ -172,11 +231,11 @@ function initScratchCards() {
   });
 }
 
-/* Parallax Tilt Physics */
+/* Parallax Tilt Physics for Desktop */
 document.addEventListener('mousemove', (e) => {
   const cards = document.querySelectorAll('.tilt-card');
-  const x = (window.innerWidth / 2 - e.pageX) / 30;
-  const y = (window.innerHeight / 2 - e.pageY) / 30;
+  const x = (window.innerWidth / 2 - e.pageX) / 35;
+  const y = (window.innerHeight / 2 - e.pageY) / 35;
 
   cards.forEach(card => {
     card.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
@@ -197,7 +256,7 @@ function initPetals() {
     height = canvas.height = window.innerHeight;
   });
 
-  const petals = Array.from({ length: 25 }, () => ({
+  const petals = Array.from({ length: 28 }, () => ({
     x: Math.random() * width,
     y: Math.random() * height,
     size: Math.random() * 8 + 6,
@@ -209,7 +268,7 @@ function initPetals() {
 
   function animate() {
     ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
 
     petals.forEach(p => {
       ctx.save();
@@ -238,6 +297,7 @@ function initPetals() {
 
 /* Music Player Controls */
 function toggleAudio() {
+  playSound('click');
   const music = document.getElementById('bg-music');
   const btn = document.getElementById('audio-toggle-btn');
 
@@ -264,6 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function enableMic() {
+  playSound('click');
   const status = document.getElementById('mic-status');
   const btn = document.getElementById('mic-btn');
 
@@ -308,6 +369,7 @@ function listenForBlow() {
 function triggerBlowout() {
   if (isBlown) return;
   isBlown = true;
+  playSound('pop');
 
   const flame = document.getElementById('candle-flame');
   const status = document.getElementById('mic-status');
@@ -331,6 +393,7 @@ function triggerBlowout() {
 }
 
 function closeWishModal() {
+  playSound('click');
   const modal = document.getElementById('wish-modal');
   if (modal) modal.classList.remove('active');
 }
