@@ -83,7 +83,7 @@ body {
   border: 2px solid #ffffff;
   box-shadow: 0 15px 35px rgba(233, 30, 99, 0.2);
   text-align: center;
-  transition: transform 0.15s ease-out;
+  transition: transform 0.15s ease-out, height 0.3s ease;
 }
 
 /* Passcode Card */
@@ -112,7 +112,29 @@ body {
 .section-title { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: #2b2b2b; margin-bottom: 4px; }
 .deck-subtitle { font-size: 0.78rem; color: #777777; margin-bottom: 18px; }
 
-.card-stack { position: relative; width: 100%; height: 420px; margin-bottom: 15px; }
+.card-stack { position: relative; width: 100%; height: 420px; margin-bottom: 15px; transition: height 0.4s ease; }
+.card-stack.shrink { height: 180px; }
+
+.lily-completion-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff0f3;
+  border-radius: 20px;
+  border: 1px dashed #f8bbd0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+}
+
+.lily-icon { font-size: 2rem; margin-bottom: 10px; }
+.lily-completion-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: #ec407a; margin-bottom: 6px; }
+.lily-completion-card p { font-size: 0.85rem; color: #666; }
 
 .stacked-card {
   position: absolute;
@@ -124,11 +146,11 @@ body {
   transition: transform 0.4s ease, opacity 0.4s ease;
 }
 
-.stacked-card:nth-child(1) { transform: rotate(-3deg); }
-.stacked-card:nth-child(2) { transform: rotate(2deg); }
-.stacked-card:nth-child(3) { transform: rotate(-1deg); }
-.stacked-card:nth-child(4) { transform: rotate(3deg); }
-.stacked-card:nth-child(5) { transform: rotate(0deg); }
+.stacked-card:nth-child(2) { transform: rotate(-3deg); }
+.stacked-card:nth-child(3) { transform: rotate(2deg); }
+.stacked-card:nth-child(4) { transform: rotate(-1deg); }
+.stacked-card:nth-child(5) { transform: rotate(3deg); }
+.stacked-card:nth-child(6) { transform: rotate(0deg); }
 
 .stacked-card.swiped { transform: translateY(-120%) rotate(15deg) !important; opacity: 0; pointer-events: none; }
 
