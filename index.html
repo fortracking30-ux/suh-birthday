@@ -42,7 +42,7 @@
           <span class="dot" id="dot-3"></span>
         </div>
 
-        <p class="passcode-hint">Hint: What's the date today? 🗓️️</p>
+        <p class="passcode-hint">Hint: What's the date today? 🗓️</p>
 
         <div class="keypad">
           <button onclick="pressKey('1')">1</button>
@@ -85,7 +85,7 @@
           <!-- Lily Reveal Card -->
           <div class="lily-completion-card" id="lily-completion-card">
             <div class="lily-icon">⚜️ 🌸 ⚜️</div>
-            <h3>That's all the memories for now!</h3>
+            <h3>Those are all my favorite pictures of you for now! ✨</h3>
             <p>Ready to read your birthday message? 💌</p>
           </div>
 
@@ -95,11 +95,11 @@
               <div class="card-front">
                 <div class="photo-wrapper"><img src="photo5.jpg" alt="Suh 5"></div>
                 <p class="card-caption">"Even the moon would take a step back next to this."</p>
-                <span class="flip-hint">🔄 Tap photo to flip memory</span>
+                <span class="flip-hint">🔄 Tap photo to flip note</span>
               </div>
               <div class="card-back">
                 <div class="back-content">
-                  <h3>Memory #5 🌙</h3>
+                  <h3>Note #5 🌙</h3>
                   <p>A constant reminder of how effortlessly you brighten up every single place you walk into.</p>
                 </div>
               </div>
@@ -113,11 +113,11 @@
               <div class="card-front">
                 <div class="photo-wrapper"><img src="photo4.jpg" alt="Suh 4"></div>
                 <p class="card-caption">"Only at the 4th slide and I'm already lost for words."</p>
-                <span class="flip-hint">🔄 Tap photo to flip memory</span>
+                <span class="flip-hint">🔄 Tap photo to flip note</span>
               </div>
               <div class="card-back">
                 <div class="back-content">
-                  <h3>Memory #4 ✨</h3>
+                  <h3>Note #4 ✨</h3>
                   <p>Literally no words needed here. Pure good vibes and timeless energy!</p>
                 </div>
               </div>
@@ -131,11 +131,11 @@
               <div class="card-front">
                 <div class="photo-wrapper"><img src="photo3.jpg" alt="Suh 3"></div>
                 <p class="card-caption">"The 8th wonder of the world."</p>
-                <span class="flip-hint">🔄 Tap photo to flip memory</span>
+                <span class="flip-hint">🔄 Tap photo to flip note</span>
               </div>
               <div class="card-back">
                 <div class="back-content">
-                  <h3>Memory #3 🏛️</h3>
+                  <h3>Note #3 🏛️</h3>
                   <p>Undisputed main character energy! Keep shining always!</p>
                 </div>
               </div>
@@ -149,11 +149,11 @@
               <div class="card-front">
                 <div class="photo-wrapper"><img src="photo2.jpg" alt="Suh 2"></div>
                 <p class="card-caption">"A smile that could end any war."</p>
-                <span class="flip-hint">🔄 Tap photo to flip memory</span>
+                <span class="flip-hint">🔄 Tap photo to flip note</span>
               </div>
               <div class="card-back">
                 <div class="back-content">
-                  <h3>Memory #2 😊</h3>
+                  <h3>Note #2 😊</h3>
                   <p>Your smile genuinely has the best contagious positivity!</p>
                 </div>
               </div>
@@ -167,11 +167,11 @@
               <div class="card-front">
                 <div class="photo-wrapper"><img src="photo1.jpg" alt="Suh 1"></div>
                 <p class="card-caption">"The only goddess I'm a theist for."</p>
-                <span class="flip-hint">🔄 Tap photo to flip memory</span>
+                <span class="flip-hint">🔄 Tap photo to flip note</span>
               </div>
               <div class="card-back">
                 <div class="back-content">
-                  <h3>Memory #1 🌸</h3>
+                  <h3>Note #1 🌸</h3>
                   <p>Starting off with one of the most aesthetic pictures ever taken.</p>
                 </div>
               </div>
@@ -202,12 +202,31 @@
             My biggest wish for you today (and always) is simple: to see you happy, smiling, and feeling as special as you truly are to me. Have the most amazing birthday! 🤍
           </p>
 
-          <button class="btn-next" onclick="goToScreen('screen-coupons')">Claim Your Birthday Perks 🎟️️ ➔</button>
+          <button class="btn-next" onclick="goToScreen('screen-jar')">Open The Note Jar 🫙 ➔</button>
         </div>
       </div>
     </div>
 
-    <!-- SCREEN 6: SCRATCH-OFF COUPONS -->
+    <!-- SCREEN 6: REASONS YOU'RE AWESOME JAR -->
+    <div class="screen" id="screen-jar">
+      <div class="card jar-card tilt-card">
+        <h2 class="section-title">Little Note Jar 🫙</h2>
+        <p class="deck-subtitle">Tap the jar to draw a little note!</p>
+
+        <div class="jar-wrapper" onclick="drawJarNote()">
+          <div class="jar-icon">🏺</div>
+          <p class="jar-tap-hint">✨ Tap to pull a note ✨</p>
+        </div>
+
+        <div class="jar-note-display" id="jar-note-box">
+          <p id="jar-note-text">"Tap the jar above to unlock a reason why you're awesome!"</p>
+        </div>
+
+        <button class="btn-next highlight" style="margin-top:20px;" onclick="goToScreen('screen-coupons')">Claim Your Birthday Perks 🎟️ ➔</button>
+      </div>
+    </div>
+
+    <!-- SCREEN 7: SCRATCH-OFF COUPONS -->
     <div class="screen" id="screen-coupons">
       <div class="card coupon-card tilt-card">
         <h2 class="section-title">Scratch & Claim 🎁</h2>
@@ -248,7 +267,7 @@
       </div>
     </div>
 
-    <!-- SCREEN 7: CAKE BLOWOUT & MUSIC PLAYER -->
+    <!-- SCREEN 8: CAKE BLOWOUT & MUSIC PLAYER -->
     <div class="screen" id="screen-cake">
       <div class="card cake-card tilt-card">
         <h2 class="section-title">Make a Wish 🎂</h2>
