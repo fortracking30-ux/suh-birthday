@@ -28,18 +28,19 @@ body {
   z-index: 1;
 }
 
-/* Widescreen Outer App Container */
+/* App Container Centered on Desktop and Mobile */
 .app-container {
   width: 100%;
-  max-width: 410px;
-  height: 90vh;
-  max-height: 750px;
+  max-width: 400px;
+  height: 92vh;
+  max-height: 780px;
   position: relative;
   z-index: 2;
+  perspective: 1000px;
   margin: 0 auto;
 }
 
-/* Hide all screens by default */
+/* Screen Base */
 .screen {
   position: absolute;
   width: 100%;
@@ -47,92 +48,76 @@ body {
   top: 0;
   left: 0;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
-  padding: 24px 20px;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1.5px solid rgba(255, 255, 255, 0.9);
-  border-radius: 32px;
-  box-shadow: 0 20px 40px rgba(186, 104, 200, 0.2);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  transform: translateY(15px);
-  overflow-y: auto;
-}
-
-/* Active Screen Display */
-.screen.active {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateY(0);
-}
-
-/* Modal Overlay Styling (Keeps Wish Modal Hidden Until Blowout) */
-.modal-overlay, #wish-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
-  z-index: 1000;
-  display: flex;
   justify-content: center;
   align-items: center;
   opacity: 0;
   visibility: hidden;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transform: translateY(15px);
   pointer-events: none;
-  transition: all 0.3s ease;
 }
 
-.modal-overlay.active, #wish-modal.active {
+.screen.active {
   opacity: 1;
   visibility: visible;
+  transform: translateY(0);
   pointer-events: auto;
 }
 
-.modal-card {
-  width: 85%;
-  max-width: 320px;
-  background: #ffffff;
+/* Glassmorphism Card Style */
+.card {
+  width: 92%;
+  height: 92%;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
   border-radius: 28px;
-  padding: 24px;
+  box-shadow: 0 15px 35px rgba(233, 30, 99, 0.15);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   text-align: center;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
-  border: 1px solid rgba(248, 187, 208, 0.8);
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
-.modal-header {
+/* Typography */
+h1, h2, h3, .section-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.6rem;
-  color: #880e4f;
-  margin-bottom: 10px;
+  font-weight: 600;
+  color: #6a1b9a;
 }
 
-.modal-body {
-  font-size: 0.9rem;
-  color: #4a154b;
-  line-height: 1.5;
-  margin-bottom: 18px;
+.section-title {
+  font-size: 1.8rem;
 }
 
-/* Blossom Screen */
+.deck-subtitle, .passcode-subtitle {
+  font-size: 0.85rem;
+  color: #ad1457;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+/* SCREEN 1: BLOSSOM */
 .blossom-wrapper {
   margin: auto;
   cursor: pointer;
+  text-align: center;
 }
 
 .blossom-flower {
   font-size: 5rem;
   filter: drop-shadow(0 8px 15px rgba(233, 30, 99, 0.3));
+  transition: transform 0.3s ease;
+}
+
+.blossom-wrapper:hover .blossom-flower {
+  transform: scale(1.1);
 }
 
 .blossom-text {
@@ -143,7 +128,15 @@ body {
   margin-top: 12px;
 }
 
-/* Keypad & Pins */
+/* SCREEN 2: KEYPAD */
+.card-flower {
+  font-size: 2.2rem;
+}
+
+.passcode-title {
+  font-size: 1.8rem;
+}
+
 .pin-dots {
   display: flex;
   gap: 16px;
@@ -156,11 +149,18 @@ body {
   border-radius: 50%;
   border: 2px solid #ec407a;
   background: transparent;
+  transition: all 0.2s ease;
 }
 
 .dot.filled {
   background: #ec407a;
   box-shadow: 0 0 10px rgba(236, 64, 122, 0.6);
+}
+
+.passcode-hint {
+  font-size: 0.8rem;
+  color: #880e4f;
+  opacity: 0.8;
 }
 
 .keypad {
@@ -169,25 +169,39 @@ body {
   gap: 12px;
   width: 100%;
   max-width: 260px;
+  margin-top: 10px;
 }
 
 .keypad button {
   height: 52px;
   border-radius: 50%;
   border: none;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.9);
   font-size: 1.25rem;
+  font-weight: 500;
   color: #4a154b;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.keypad button:active {
+  background: #f8bbd0;
 }
 
 .keypad button.empty-key {
   visibility: hidden;
 }
 
-/* Buttons */
-.btn-choice, .btn-next, .btn-mic, .btn-close-modal {
+/* BUTTONS */
+.btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.btn-choice, .btn-next, .btn-mic {
   width: 100%;
   padding: 14px;
   border-radius: 20px;
@@ -198,27 +212,29 @@ body {
   font-size: 0.95rem;
   box-shadow: 0 8px 20px rgba(216, 27, 96, 0.3);
   cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.btn-choice:active, .btn-next:active {
+  transform: scale(0.98);
 }
 
 .btn-choice.no-btn {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.8);
   color: #880e4f;
   box-shadow: none;
 }
 
-.btn-group {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-}
-
-/* Photo Cards */
+/* SCREEN 4: PHOTO DECK & 3D FLIP */
 .card-stack {
   position: relative;
   width: 100%;
   height: 380px;
   margin: 10px 0;
+}
+
+.card-stack.shrink {
+  height: 220px;
 }
 
 .stacked-card {
@@ -228,11 +244,11 @@ body {
   top: 0;
   left: 0;
   perspective: 1000px;
-  transition: transform 0.6s ease, opacity 0.5s ease;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease;
 }
 
 .stacked-card.swiped {
-  transform: translateX(120%) rotate(25deg) scale(0.85);
+  transform: translateX(120%) rotate(25deg) scale(0.85) !important;
   opacity: 0;
   pointer-events: none;
 }
@@ -243,8 +259,9 @@ body {
   height: 85%;
   border-radius: 24px;
   transform-style: preserve-3d;
-  transition: transform 0.6s ease;
+  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
   cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
 .card-inner.flipped {
@@ -279,11 +296,36 @@ body {
   object-fit: cover;
 }
 
+.card-caption {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  color: #4a154b;
+  margin: 4px 0;
+}
+
+.flip-hint {
+  font-size: 0.7rem;
+  color: #ad1457;
+  opacity: 0.75;
+}
+
 .card-back {
   transform: rotateY(180deg);
   background: #fff5f8;
   justify-content: center;
   padding: 20px;
+}
+
+.back-content h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.back-content p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #4a154b;
 }
 
 .btn-swipe-card {
@@ -298,12 +340,124 @@ body {
   cursor: pointer;
 }
 
-/* Scratch Coupons */
+.lily-completion-card {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 24px;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed #f48fb1;
+}
+
+.lily-completion-card h3 {
+  font-size: 1.4rem;
+  margin: 12px 0 6px 0;
+  color: #880e4f;
+}
+
+/* SCREEN 5: ENVELOPE & LETTER */
+.interactive-envelope {
+  width: 140px;
+  height: 90px;
+  background: #f8bbd0;
+  border-radius: 12px;
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+  transition: transform 0.3s ease;
+}
+
+.interactive-envelope:hover {
+  transform: scale(1.05);
+}
+
+.envelope-seal {
+  font-size: 2rem;
+}
+
+.letter-scroll {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: all 0.6s ease;
+  text-align: left;
+  background: #fff;
+  padding: 0 18px;
+  border-radius: 20px;
+}
+
+.letter-scroll.active {
+  max-height: 380px;
+  opacity: 1;
+  padding: 18px;
+  margin-top: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+.letter-header {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+}
+
+.letter-body {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* SCREEN 6: JAR NOTES */
+.jar-wrapper {
+  cursor: pointer;
+  margin: 15px 0;
+}
+
+.jar-icon {
+  font-size: 4.5rem;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.08));
+}
+
+.jar-tap-hint {
+  font-size: 0.8rem;
+  color: #ad1457;
+  margin-top: 6px;
+}
+
+.jar-note-display {
+  min-height: 90px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #f8bbd0;
+}
+
+#jar-note-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  font-style: italic;
+  color: #4a154b;
+  transition: opacity 0.2s ease;
+}
+
+/* SCREEN 7: SCRATCH COUPONS */
 .coupons-grid {
   display: flex;
   flex-direction: column;
   gap: 12px;
   width: 100%;
+  margin-top: 10px;
 }
 
 .scratch-container {
@@ -325,15 +479,27 @@ body {
   gap: 12px;
 }
 
+.reward-icon {
+  font-size: 1.8rem;
+}
+
+.reward-text {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #4a154b;
+  text-align: left;
+}
+
 .scratch-canvas {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  cursor: pointer;
 }
 
-/* Cake & Candle */
+/* SCREEN 8: CAKE & MUSIC */
 .interactive-cake {
   margin: 20px 0 10px 0;
   display: flex;
@@ -361,6 +527,7 @@ body {
   box-shadow: 0 0 15px #ff9800;
   animation: flicker 0.15s infinite alternate;
   cursor: pointer;
+  transition: opacity 0.5s ease;
 }
 
 .flame.out {
@@ -387,12 +554,104 @@ body {
   border-radius: 0 0 16px 16px;
 }
 
+.status-box {
+  font-size: 0.8rem;
+  color: #ad1457;
+  margin-bottom: 10px;
+}
+
 .music-player-widget {
   width: 100%;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 18px;
   padding: 12px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-top: 15px;
+  border: 1px solid #f8bbd0;
+}
+
+.music-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.music-icon {
+  font-size: 1.4rem;
+}
+
+.song-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.artist-name {
+  font-size: 0.72rem;
+  color: #777;
+}
+
+.btn-play-pause {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+/* MODAL OVERLAY (STRICTLY HIDDEN UNTIL CANDLE BLOWOUT) */
+.modal-overlay, #wish-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: none !important;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-overlay.active, #wish-modal.active {
+  display: flex !important;
+}
+
+.modal-card {
+  width: 85%;
+  max-width: 320px;
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  border: 1px solid #f8bbd0;
+}
+
+.modal-header {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  color: #880e4f;
+  margin-bottom: 10px;
+}
+
+.modal-body {
+  font-size: 0.9rem;
+  color: #4a154b;
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+
+.btn-close-modal {
+  width: 100%;
+  padding: 12px;
+  border-radius: 16px;
+  border: none;
+  background: #ec407a;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
 }
