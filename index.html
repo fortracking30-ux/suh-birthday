@@ -4,178 +4,142 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Happy Birthday, Suh! ✨</title>
-  
-  <!-- Tailwind CSS & Libraries -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  
-  <!-- Link to your local CSS file -->
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="styles.css"> <!-- Covers either filename -->
 </head>
-<body x-data="appData()" x-init="initApp()">
+<body>
 
-  <!-- Background Petals Canvas -->
+  <!-- Floating Petals Canvas Background -->
   <canvas id="petals-canvas"></canvas>
 
-  <!-- FLOWER BLOOM OVERLAY TRANSITION -->
-  <div class="flower-layer" :class="{ 'bloom-open': flowerBloomed }">
-    <div class="flower-half flower-half-left">
-      <div class="text-white text-6xl transform translate-x-1/2 opacity-80">🌸</div>
-    </div>
-    <div class="flower-half flower-half-right">
-      <div class="text-white text-6xl transform -translate-x-1/2 opacity-80">🌸</div>
-    </div>
-  </div>
+  <div class="main-wrapper">
 
-  <main class="relative z-20 max-w-md mx-auto min-h-screen px-4 py-8 flex flex-col justify-center items-center">
+    <!-- STEP 1: GIFT UNWRAP -->
+    <section id="step-gift" class="card active">
+      <div class="gift-icon" id="gift-btn">🎁</div>
+      <h1>A Special Surprise</h1>
+      <p class="subtitle">Tap the gift box to unlock your birthday world...</p>
+    </section>
 
-    <!-- STEP 1: UNWRAPPING GIFT BOX SCREEN -->
-    <template x-if="step === 'gift'">
-      <div class="text-center cursor-pointer animate-bounce my-auto" @click="triggerGiftOpen()">
-        <div class="text-8xl drop-shadow-lg">🎁</div>
-        <h1 class="font-serif-custom text-3xl font-semibold text-pink-900 mt-6">A special surprise for you...</h1>
-        <p class="text-sm text-pink-600 mt-2">(Tap the gift box to open)</p>
+    <!-- STEP 2: SECRET PASSKEY LOCK -->
+    <section id="step-lock" class="card">
+      <div class="lock-icon">🔒</div>
+      <h2>Enter Passkey</h2>
+      <p class="subtitle">Enter the secret 4-digit code</p>
+
+      <div class="pin-display">
+        <span class="dot" id="dot-0"></span>
+        <span class="dot" id="dot-1"></span>
+        <span class="dot" id="dot-2"></span>
+        <span class="dot" id="dot-3"></span>
       </div>
-    </template>
 
-    <!-- STEP 2: LOCK / PASSKEY SCREEN -->
-    <template x-if="step === 'lock'">
-      <div class="glass-card w-full rounded-3xl p-6 text-center my-auto transition-all duration-500">
-        <div class="text-4xl mb-2">🔒</div>
-        <h2 class="font-serif-custom text-2xl font-bold text-pink-900">Enter Passkey</h2>
-        <p class="text-xs text-pink-600 mt-1">Enter the secret 4-digit pin</p>
-
-        <!-- PIN Dots -->
-        <div class="flex justify-center gap-4 my-6">
-          <template x-for="i in [0,1,2,3]">
-            <div class="w-4 h-4 rounded-full border-2 border-pink-400 transition-all duration-300"
-                 :class="{ 'bg-pink-500 shadow-lg shadow-pink-300': pin.length > i, 'bg-transparent': pin.length <= i }">
-            </div>
-          </template>
-        </div>
-
-        <!-- Keypad -->
-        <div class="grid grid-cols-3 gap-3 max-w-xs mx-auto">
-          <template x-for="num in ['1','2','3','4','5','6','7','8','9']">
-            <button @click="pressKey(num)" class="h-12 rounded-full bg-white text-lg font-semibold text-gray-800 shadow-sm active:bg-pink-100 transition">
-              <span x-text="num"></span>
-            </button>
-          </template>
-          <div></div>
-          <button @click="pressKey('0')" class="h-12 rounded-full bg-white text-lg font-semibold text-gray-800 shadow-sm active:bg-pink-100 transition">0</button>
-          <button @click="deleteKey()" class="h-12 rounded-full bg-white text-lg font-semibold text-pink-700 shadow-sm active:bg-pink-100 transition">⌫</button>
-        </div>
+      <div class="keypad">
+        <button class="key" data-val="1">1</button>
+        <button class="key" data-val="2">2</button>
+        <button class="key" data-val="3">3</button>
+        <button class="key" data-val="4">4</button>
+        <button class="key" data-val="5">5</button>
+        <button class="key" data-val="6">6</button>
+        <button class="key" data-val="7">7</button>
+        <button class="key" data-val="8">8</button>
+        <button class="key" data-val="9">9</button>
+        <button class="key empty"></button>
+        <button class="key" data-val="0">0</button>
+        <button class="key backspace" id="key-del">⌫</button>
       </div>
-    </template>
+    </section>
 
     <!-- STEP 3: MAIN EXPERIENCE -->
-    <template x-if="step === 'main'">
-      <div class="w-full space-y-6 transition-all duration-700">
+    <div id="step-main" class="main-content">
 
-        <!-- HEADER & QUOTE CARD -->
-        <div class="text-center py-4">
-          <h1 class="font-serif-custom text-4xl font-bold text-pink-900">Happy Birthday, Suh! ✨</h1>
-          <p class="font-serif-custom italic text-lg text-pink-700 mt-2">"Distance means so little when a friendship means so much."</p>
+      <!-- Header Card -->
+      <section class="card glass">
+        <span class="badge">Happy Birthday!</span>
+        <h1>Suhani ✨</h1>
+        <p class="quote">"Distance means so little when a friendship means so much."</p>
+      </section>
+
+      <!-- Cake & Wish -->
+      <section class="card glass">
+        <h2>Make a Wish 🎂</h2>
+        <p class="subtitle" id="wish-instruction">Blow into your microphone or tap the flame!</p>
+
+        <div class="cake-wrapper">
+          <div class="flame" id="flame" onclick="blowOutCandle()"></div>
+          <div class="candle"></div>
+          <div class="cake">🧁</div>
         </div>
 
-        <!-- MAKE A WISH & BLOW OUT CANDLE -->
-        <div class="glass-card rounded-3xl p-6 text-center">
-          <h2 class="font-serif-custom text-2xl font-semibold text-pink-900">Make a Wish 🎂</h2>
-          <p class="text-xs text-pink-600 mb-4" x-text="candleBlown ? 'Your wish has been sent into the universe! ✨' : 'Close your eyes, make a wish, and blow into your mic (or tap below)'"></p>
-
-          <div class="relative py-4 flex flex-col items-center justify-center">
-            <!-- Candle Flame -->
-            <div x-show="!candleBlown" class="flame transition-opacity duration-500"></div>
-            <div x-show="candleBlown" class="text-xs text-gray-400 font-mono animate-pulse">💨 ~ puff ~</div>
-
-            <!-- Candle Body -->
-            <div class="w-4 h-16 bg-gradient-to-b from-pink-200 to-pink-400 rounded-sm shadow-inner mt-1"></div>
-            
-            <!-- Cupcake Base -->
-            <div class="text-6xl -mt-2">🧁</div>
-          </div>
-
-          <div class="mt-3">
-            <button x-show="!micActive && !candleBlown" @click="startMicBlow()" class="px-5 py-2 rounded-full bg-pink-500 text-white font-semibold text-xs shadow-md hover:bg-pink-600 transition">
-              🎙️ Enable Mic to Blow
-            </button>
-            <button x-show="!candleBlown" @click="blowCandle()" class="ml-2 px-4 py-2 rounded-full bg-pink-100 text-pink-800 font-semibold text-xs hover:bg-pink-200 transition">
-              💨 Tap to Blow Out
-            </button>
-            <div x-show="candleBlown" class="text-pink-800 font-serif-custom italic text-lg font-bold mt-2">
-              🎉 May all your sweet wishes come true! 🎉
-            </div>
-          </div>
+        <div class="wish-controls">
+          <button class="action-btn" id="mic-btn" onclick="initMic()">🎙️ Enable Mic Blow</button>
+          <button class="action-btn secondary" onclick="blowOutCandle()">💨 Tap to Blow</button>
         </div>
 
-        <!-- 3D POLAROID DECK (ALL 5 PHOTOS) -->
-        <div class="glass-card rounded-3xl p-5 text-center">
-          <h2 class="font-serif-custom text-2xl font-semibold text-pink-900">Favorite Moments 📸</h2>
-          <p class="text-xs text-pink-600 mb-4">Tap photo to flip for a note, or swipe to reveal next</p>
+        <div id="wish-message" class="hidden-msg">
+          🎉 May all your sweetest wishes come true! 🎉
+        </div>
+      </section>
 
-          <div class="relative w-full h-80">
-            <template x-for="(card, index) in cards" :key="index">
-              <div x-show="!card.swiped"
-                   class="absolute inset-0 transition-all duration-500 perspective-1000"
-                   :style="'z-index: ' + (10 - index)">
-                
-                <div class="relative w-full h-full rounded-2xl transition-transform duration-700 transform-style-3d cursor-pointer"
-                     :class="{ 'rotate-y-180': card.flipped }"
-                     @click="card.flipped = !card.flipped">
-                  
-                  <!-- Front Side -->
-                  <div class="absolute inset-0 bg-white p-3 rounded-2xl shadow-md flex flex-col justify-between items-center backface-hidden">
-                    <div class="w-full h-3/4 rounded-xl overflow-hidden bg-pink-100">
-                      <img :src="card.image" :alt="card.caption" class="w-full h-full object-cover">
-                    </div>
-                    <p class="font-serif-custom italic text-lg text-pink-900" x-text="card.caption"></p>
-                    <button @click.stop="card.swiped = true" class="px-4 py-1 rounded-full bg-pink-200 text-pink-800 text-xs font-semibold hover:bg-pink-300">
-                      Next ➔
-                    </button>
-                  </div>
+      <!-- 3D Photo Deck -->
+      <section class="card glass">
+        <h2>Favorite Memories 📸</h2>
+        <p class="subtitle">Tap photo to flip note • Tap "Next" to swipe</p>
 
-                  <!-- Back Side -->
-                  <div class="absolute inset-0 bg-pink-50 p-6 rounded-2xl shadow-md flex flex-col justify-center items-center text-center backface-hidden rotate-y-180">
-                    <h3 class="font-serif-custom text-xl font-bold text-pink-900 mb-2" x-text="card.backTitle"></h3>
-                    <p class="text-sm text-gray-700 leading-relaxed" x-text="card.backText"></p>
-                  </div>
+        <div class="deck-container" id="deck-container">
+          <!-- Cards injected via script.js -->
+        </div>
+      </section>
 
-                </div>
-              </div>
-            </template>
-          </div>
+      <!-- Handwritten Letter -->
+      <section class="card glass">
+        <h2>A Note For You 📝</h2>
+        <div class="letter-body">
+          <p>Dear Suh,</p>
+          <p>Writing this little note just to wish you the absolute happiest birthday! Thank you for bringing so much brightness, laughter, and effortless warmth into every conversation.</p>
+          <p>I hope this year brings you infinite success, pure happiness, and everything you've been dreaming of.</p>
+          <p class="signature">— Always your friend ✨</p>
+        </div>
+      </section>
+
+      <!-- Reason Jar -->
+      <section class="card glass jar-card" onclick="drawJarNote()">
+        <h2>Jar of Smiles 🫙</h2>
+        <p class="subtitle">Tap the jar whenever you need a quick mood boost!</p>
+
+        <div class="jar-emoji">🫙</div>
+        <div class="jar-display" id="jar-text">"Tap the jar to draw a note!"</div>
+      </section>
+
+      <!-- Birthday Coupons -->
+      <section class="card glass">
+        <h2>Virtual Coupons 🎟️</h2>
+        <p class="subtitle">Scratch below to claim your birthday perks!</p>
+
+        <div class="coupon">
+          <span class="coupon-emoji">☕</span>
+          <span class="coupon-title">Virtual Coffee & Gossip Session</span>
+          <canvas class="scratch-canvas" data-coupon="0"></canvas>
         </div>
 
-        <!-- SCROLLABLE HANDWRITTEN LETTER -->
-        <div class="glass-card rounded-3xl p-6 text-left">
-          <h2 class="font-serif-custom text-2xl font-bold text-center text-pink-900 mb-3">A Little Note From Me To You 📝</h2>
-          <div class="space-y-3 text-sm text-gray-700 leading-relaxed max-h-60 overflow-y-auto pr-2">
-            <p>Dear Suh,</p>
-            <p>Writing this little note just because you deserve all the warmth and joy today! Thank you for being such an extraordinary friend, for sharing the best giggles, and for making conversations feel so easy and fun even from afar.</p>
-            <p>I hope this year brings you infinite success, happiness, and all the sweet moments you've been wishing for. Stay the wonderful person you are!</p>
-            <p class="font-serif-custom italic font-semibold text-pink-900 pt-2">— Always your friend ✨</p>
-          </div>
+        <div class="coupon">
+          <span class="coupon-emoji">🍔</span>
+          <span class="coupon-title">Food Delivery Treat On Me</span>
+          <canvas class="scratch-canvas" data-coupon="1"></canvas>
         </div>
 
-        <!-- VIRTUAL REASONS JAR -->
-        <div class="glass-card rounded-3xl p-5 text-center cursor-pointer" @click="drawJarNote()">
-          <h2 class="font-serif-custom text-2xl font-semibold text-pink-900">Jar of Virtual Reasons 🫙</h2>
-          <p class="text-xs text-pink-600 mb-3">Tap the jar whenever you need a quick smile!</p>
-          
-          <div class="text-6xl mb-3 hover:scale-110 transition-transform">🫙</div>
-          <div class="bg-white rounded-2xl p-4 border border-dashed border-pink-300 min-h-[70px] flex items-center justify-center">
-            <p class="font-serif-custom italic text-pink-900 text-base" x-text="currentJarNote"></p>
-          </div>
+        <div class="coupon">
+          <span class="coupon-emoji">🎬</span>
+          <span class="coupon-title">Late Night Movie Watch Party</span>
+          <canvas class="scratch-canvas" data-coupon="2"></canvas>
         </div>
+      </section>
 
-        <!-- BIRTHDAY SCRATCH PERKS -->
-        <div class="glass-card rounded-3xl p-5 text-center">
-          <h2 class="font-serif-custom text-2xl font-semibold text-pink-900">Virtual Birthday Coupons 🎟️</h2>
-          <p class="text-xs text-pink-600 mb-4">Scratch below to claim your birthday perks!</p>
+    </div>
 
-          <div class="space-y-3">
-            <template x-for="(coupon, idx) in coupons" :key="idx">
-              <div class="relative w-full h-16 rounded-xl overflow-hidden bg-white shadow-sm flex items-center px-4 gap-3">
-                <span class="text-2xl" x-text="coupon.icon"></span>
+  </div>
+
+  <audio id="bg-music" loop src="song.mp3"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
