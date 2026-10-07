@@ -1,119 +1,107 @@
-// --- STATE MANAGEMENT ---
-let currentPin = '';
+let pin = '';
 const correctPin = '0910';
 let candleBlown = false;
 
-// Data for 5 Photos
+// Restored exact photo captions & back note texts
 const cardsData = [
-  { img: 'photo1.jpg', caption: 'Endless Late Chats ✨', title: 'A Special Note 💌', text: 'Thank you for bringing so much brightness into every single conversation!' },
-  { img: 'photo2.jpg', caption: 'Good Vibes Always 🌸', title: 'Always Dependable 🌟', text: 'Talking to you always turns an ordinary day into something cheerful.' },
-  { img: 'photo3.jpg', caption: 'Main Character Energy 🤍', title: 'Truly One of a Kind ✨', text: 'Never lose your effortless charm, humor, and awesome spirit!' },
-  { img: 'photo4.jpg', caption: 'Pure Joy & Smiles 🌼', title: 'Unfiltered Laughter 😂', text: 'For all the random giggles, fun banter, and shared jokes.' },
-  { img: 'photo5.jpg', caption: 'Best Memories Ahead 💫', title: 'To Another Great Year 🎉', text: 'Wishing you the happiest year ahead full of success and pure joy!' }
+  { img: 'photo1.jpg', caption: 'That’s all my favorite photo of yours ✨', title: 'Favorite Photo 🤍', text: 'This photo easily takes the top spot. Absolutely love this one!' },
+  { img: 'photo2.jpg', caption: 'That’s all my favorite photo of yours 🌸', title: 'Favorite Photo 🌸', text: 'Another incredible picture that captures your best vibe!' },
+  { img: 'photo3.jpg', caption: 'That’s all my favorite photo of yours 🤍', title: 'Favorite Photo ✨', text: 'Effortless style and pure charm right here.' },
+  { img: 'photo4.jpg', caption: 'That’s all my favorite photo of yours 🌼', title: 'Favorite Photo 😂', text: 'Always bringing out the best energy and brightest smile.' },
+  { img: 'photo5.jpg', caption: 'That’s all my favorite photo of yours 💫', title: 'Favorite Photo 🎉', text: 'One of the best captures, truly one of a kind!' }
 ];
 
-// Jar Reasons Data
 const jarNotes = [
-  "✨ Your sense of humor always brightens up the entire conversation.",
-  "🌸 You bring effortless positive energy every single time we talk.",
-  "✨ Thank you for being such a genuine, fun, and reliable friend.",
-  "🌸 10/10 main character energy in every text message!",
-  "✨ Even across distance, your friendship means so much."
+  "✨ Your sense of humor always turns ordinary chats into the best conversations.",
+  "🌸 You bring so much positive energy every single time we talk.",
+  "✨ Thank you for being such a genuine, fun, and amazing friend.",
+  "🌸 10/10 main character energy in every text!",
+  "✨ Even across distance, your friendship means so much!"
 ];
 
-// --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
-  initPetals();
   setupGift();
   setupKeypad();
+  setupCandle();
+  setupJar();
 });
 
-// --- STEP 1: GIFT UNWRAP ---
 function setupGift() {
   const giftBtn = document.getElementById('gift-btn');
   giftBtn.addEventListener('click', () => {
-    // Play Music safely
     const audio = document.getElementById('bg-music');
     if (audio) audio.play().catch(() => {});
-
-    switchCard('step-gift', 'step-lock');
+    
+    document.getElementById('screen-gift').classList.remove('active');
+    document.getElementById('screen-lock').classList.add('active');
   });
 }
 
-// --- CARD SWITCHER ---
-function switchCard(hideId, showId) {
-  const hideElem = document.getElementById(hideId);
-  const showElem = document.getElementById(showId);
-
-  if (hideElem) hideElem.classList.remove('active');
-  if (showElem) showElem.classList.add('active');
-}
-
-// --- STEP 2: KEYPAD LOCK ---
 function setupKeypad() {
   document.querySelectorAll('.key[data-val]').forEach(key => {
     key.addEventListener('click', () => {
-      if (currentPin.length < 4) {
-        currentPin += key.getAttribute('data-val');
-        updatePinDots();
-        if (currentPin.length === 4) {
-          setTimeout(validatePin, 150);
+      if (pin.length < 4) {
+        pin += key.getAttribute('data-val');
+        updateDots();
+        if (pin.length === 4) {
+          setTimeout(checkPin, 150);
         }
       }
     });
   });
 
   document.getElementById('key-del').addEventListener('click', () => {
-    currentPin = currentPin.slice(0, -1);
-    updatePinDots();
+    pin = pin.slice(0, -1);
+    updateDots();
   });
 }
 
-function updatePinDots() {
+function updateDots() {
   for (let i = 0; i < 4; i++) {
     const dot = document.getElementById(`dot-${i}`);
-    if (dot) dot.classList.toggle('filled', i < currentPin.length);
+    if (dot) dot.classList.toggle('filled', i < pin.length);
   }
 }
 
-function validatePin() {
-  if (currentPin === correctPin) {
-    // Hide lock screen
-    const lockScreen = document.getElementById('step-lock');
-    if (lockScreen) lockScreen.classList.remove('active');
-
-    // Show main content
-    const mainContent = document.getElementById('step-main');
-    if (mainContent) {
-      mainContent.classList.add('active');
-      mainContent.style.display = 'flex'; // Ensures visibility on mobile browsers
-    }
-
-    // Build interactive elements
-    initDeck();
+function checkPin() {
+  if (pin === correctPin) {
+    document.getElementById('screen-lock').classList.remove('active');
+    const main = document.getElementById('screen-main');
+    main.classList.add('active');
+    
+    initCards();
     initScratchCards();
+
+    if (typeof confetti === 'function') {
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    }
   } else {
-    alert('Incorrect PIN! Try again.');
-    currentPin = '';
-    updatePinDots();
+    alert('Incorrect passkey! Try again.');
+    pin = '';
+    updateDots();
   }
 }
 
+function setupCandle() {
+  document.getElementById('flame').addEventListener('click', blowOutCandle);
+  document.getElementById('tap-blow-btn').addEventListener('click', blowOutCandle);
+  document.getElementById('mic-btn').addEventListener('click', startMicBlow);
+}
 
-// --- STEP 3: CANDLE BLOW ---
 function blowOutCandle() {
   if (candleBlown) return;
   candleBlown = true;
-
-  const flame = document.getElementById('flame');
-  if (flame) flame.style.display = 'none';
-
-  document.querySelector('.wish-controls').style.display = 'none';
-  document.getElementById('wish-instruction').innerText = "Your wish has been launched into the universe! ✨";
-  document.getElementById('wish-message').style.display = 'block';
+  document.getElementById('flame').style.display = 'none';
+  document.getElementById('candle-controls').style.display = 'none';
+  document.getElementById('wish-success').style.display = 'block';
+  document.getElementById('candle-subtitle').innerText = "Your wish has been sent into the universe! ✨";
+  
+  if (typeof confetti === 'function') {
+    confetti({ particleCount: 100, spread: 80, origin: { y: 0.5 } });
+  }
 }
 
-async function initMic() {
+async function startMicBlow() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -123,133 +111,91 @@ async function initMic() {
     analyser.fftSize = 256;
     const data = new Uint8Array(analyser.frequencyBinCount);
 
-    function checkSound() {
+    function check() {
       if (candleBlown) return;
       analyser.getByteFrequencyData(data);
-      let volume = data.reduce((a, b) => a + b, 0) / data.length;
-      if (volume > 38) {
+      let sum = data.reduce((a, b) => a + b, 0);
+      if (sum / data.length > 38) {
         blowOutCandle();
         stream.getTracks().forEach(t => t.stop());
       } else {
-        requestAnimationFrame(checkSound);
+        requestAnimationFrame(check);
       }
     }
-    checkSound();
-  } catch (err) {
-    alert("Microphone permission denied. Use the 'Tap to Blow' button instead!");
+    check();
+  } catch (e) {
+    alert("Mic access unavailable. Tap the flame or button instead!");
   }
 }
 
-// --- 3D DECK OF CARDS ---
-function initDeck() {
-  const container = document.getElementById('deck-container');
-  container.innerHTML = '';
-
-  cardsData.forEach((item, index) => {
+function initCards() {
+  const deck = document.getElementById('card-deck');
+  deck.innerHTML = '';
+  cardsData.forEach((c, idx) => {
     const card = document.createElement('div');
     card.className = 'card-item';
-    card.style.zIndex = cardsData.length - index;
-
+    card.style.zIndex = cardsData.length - idx;
     card.innerHTML = `
       <div class="card-front">
-        <img src="${item.img}" alt="Photo" onerror="this.src='https://via.placeholder.com/300x200?text=Photo+${index+1}'">
-        <span class="card-caption">${item.caption}</span>
-        <button class="action-btn secondary" onclick="event.stopPropagation(); swipeCard(this)">Next ➔</button>
+        <img src="${c.img}" alt="Photo" onerror="this.src='https://via.placeholder.com/300x200?text=Photo+${idx+1}'">
+        <p style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.05rem; color:#702632;">${c.caption}</p>
+        <button class="btn btn-secondary swipe-btn">Next ➔</button>
       </div>
       <div class="card-back">
-        <h3>${item.title}</h3>
-        <p>${item.text}</p>
+        <h3 style="font-size:1.3rem; margin-bottom:8px;">${c.title}</h3>
+        <p style="font-size:0.85rem; color:#555; line-height:1.4;">${c.text}</p>
       </div>
     `;
+
+    card.querySelector('.swipe-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      card.classList.add('swiped');
+    });
 
     card.addEventListener('click', () => {
       card.classList.toggle('flipped');
     });
 
-    container.appendChild(card);
+    deck.appendChild(card);
   });
 }
 
-function swipeCard(btn) {
-  const card = btn.closest('.card-item');
-  if (card) card.classList.add('swiped');
+function setupJar() {
+  document.getElementById('jar-card').addEventListener('click', () => {
+    const rand = jarNotes[Math.floor(Math.random() * jarNotes.length)];
+    document.getElementById('jar-text').innerText = `"${rand}"`;
+  });
 }
 
-// --- REASON JAR ---
-function drawJarNote() {
-  const randomIndex = Math.floor(Math.random() * jarNotes.length);
-  document.getElementById('jar-text').innerText = `"${jarNotes[randomIndex]}"`;
-}
-
-// --- SCRATCH CARDS ---
 function initScratchCards() {
-  document.querySelectorAll('.scratch-canvas').forEach(canvas => {
+  [0, 1, 2].forEach(idx => {
+    const canvas = document.getElementById(`scratch-${idx}`);
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
-    // Fill scratch surface
-    ctx.fillStyle = '#f48fb1';
+    ctx.fillStyle = '#f8bbd0';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
     ctx.fillStyle = '#702632';
-    ctx.font = '600 12px Plus Jakarta Sans';
+    ctx.font = '12px Plus Jakarta Sans';
     ctx.textAlign = 'center';
     ctx.fillText('✨ Scratch to Reveal ✨', canvas.width / 2, canvas.height / 2 + 4);
 
-    let isScratching = false;
-
+    let drawing = false;
     const scratch = (e) => {
-      if (!isScratching) return;
+      if (!drawing) return;
       const rect = canvas.getBoundingClientRect();
       const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
       const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-
       ctx.globalCompositeOperation = 'destination-out';
       ctx.beginPath();
       ctx.arc(x, y, 16, 0, Math.PI * 2);
       ctx.fill();
     };
 
-    ['mousedown', 'touchstart'].forEach(evt => canvas.addEventListener(evt, (e) => { isScratching = true; scratch(e); }));
+    ['mousedown', 'touchstart'].forEach(evt => canvas.addEventListener(evt, (e) => { drawing = true; scratch(e); }));
     ['mousemove', 'touchmove'].forEach(evt => canvas.addEventListener(evt, scratch));
-    ['mouseup', 'touchend'].forEach(evt => canvas.addEventListener(evt, () => isScratching = false));
+    ['mouseup', 'touchend'].forEach(evt => canvas.addEventListener(evt, () => drawing = false));
   });
-}
-
-// --- BACKGROUND CANVAS ANIMATION ---
-function initPetals() {
-  const canvas = document.getElementById('petals-canvas');
-  const ctx = canvas.getContext('2d');
-  let w = canvas.width = window.innerWidth;
-  let h = canvas.height = window.innerHeight;
-
-  const petals = Array.from({ length: 22 }, () => ({
-    x: Math.random() * w,
-    y: Math.random() * h,
-    r: Math.random() * 5 + 3,
-    sy: Math.random() * 0.8 + 0.4,
-    sx: Math.random() * 0.4 - 0.2
-  }));
-
-  function render() {
-    ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = 'rgba(244, 143, 177, 0.45)';
-    petals.forEach(p => {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fill();
-      p.y += p.sy;
-      p.x += p.sx;
-      if (p.y > h) { p.y = -10; p.x = Math.random() * w; }
-    });
-    requestAnimationFrame(render);
-  }
-
-  window.addEventListener('resize', () => {
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = window.innerHeight;
-  });
-
-  render();
 }
