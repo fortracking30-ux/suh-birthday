@@ -78,9 +78,18 @@ function updatePinDots() {
 
 function validatePin() {
   if (currentPin === correctPin) {
-    document.getElementById('step-lock').classList.remove('active');
-    document.getElementById('step-main').classList.add('active');
-    
+    // Hide lock screen
+    const lockScreen = document.getElementById('step-lock');
+    if (lockScreen) lockScreen.classList.remove('active');
+
+    // Show main content
+    const mainContent = document.getElementById('step-main');
+    if (mainContent) {
+      mainContent.classList.add('active');
+      mainContent.style.display = 'flex'; // Ensures visibility on mobile browsers
+    }
+
+    // Build interactive elements
     initDeck();
     initScratchCards();
   } else {
@@ -89,6 +98,7 @@ function validatePin() {
     updatePinDots();
   }
 }
+
 
 // --- STEP 3: CANDLE BLOW ---
 function blowOutCandle() {
