@@ -1,201 +1,337 @@
-let pin = '';
-const correctPin = '0910';
-let candleBlown = false;
+let enteredPin = "";
+const correctPin = "0910";
+let swipedCards = 0;
+const totalCards = 5;
 
-// Restored exact photo captions & back note texts
-const cardsData = [
-  { img: 'photo1.jpg', caption: 'That’s all my favorite photo of yours ✨', title: 'Favorite Photo 🤍', text: 'This photo easily takes the top spot. Absolutely love this one!' },
-  { img: 'photo2.jpg', caption: 'That’s all my favorite photo of yours 🌸', title: 'Favorite Photo 🌸', text: 'Another incredible picture that captures your best vibe!' },
-  { img: 'photo3.jpg', caption: 'That’s all my favorite photo of yours 🤍', title: 'Favorite Photo ✨', text: 'Effortless style and pure charm right here.' },
-  { img: 'photo4.jpg', caption: 'That’s all my favorite photo of yours 🌼', title: 'Favorite Photo 😂', text: 'Always bringing out the best energy and brightest smile.' },
-  { img: 'photo5.jpg', caption: 'That’s all my favorite photo of yours 💫', title: 'Favorite Photo 🎉', text: 'One of the best captures, truly one of a kind!' }
-];
+let audioContext;
+let analyser;
+let microphone;
+let isBlown = false;
 
+/* Jar Notes Pool - Adjusted for online/remote friendship */
 const jarNotes = [
-  "✨ Your sense of humor always turns ordinary chats into the best conversations.",
-  "🌸 You bring so much positive energy every single time we talk.",
-  "✨ Thank you for being such a genuine, fun, and amazing friend.",
-  "🌸 10/10 main character energy in every text!",
-  "✨ Even across distance, your friendship means so much!"
+  "✨ Your laugh and sense of humor always make my day brighter through every text.",
+  "🌸 You bring the absolute best effortless vibes to every single conversation.",
+  "✨ Talking to you is easily one of the best parts of my routine.",
+  "🌸 You have this incredible natural talent for making long chats feel like minutes.",
+  "✨ Undisputed 10/10 main character energy, always!",
+  "🌸 Never change how sweet, hilarious, and genuine you are across every message!"
 ];
+let unusedNotes = [...jarNotes];
 
-document.addEventListener('DOMContentLoaded', () => {
-  setupGift();
-  setupKeypad();
-  setupCandle();
-  setupJar();
-});
+function drawJarNote() {
+  if (unusedNotes.length === 0) {
+    unusedNotes = [...jarNotes];
+  }
+  const randomIndex = Math.floor(Math.random() * unusedNotes.length);
+  const note = unusedNotes.splice(randomIndex, 1)[0];
 
-function setupGift() {
-  const giftBtn = document.getElementById('gift-btn');
-  giftBtn.addEventListener('click', () => {
-    const audio = document.getElementById('bg-music');
-    if (audio) audio.play().catch(() => {});
-    
-    document.getElementById('screen-gift').classList.remove('active');
-    document.getElementById('screen-lock').classList.add('active');
-  });
+  const display = document.getElementById('jar-note-text');
+  if (display) {
+    display.style.opacity = 0;
+    setTimeout(() => {
+      display.innerText = `"${note}"`;
+      display.style.opacity = 1;
+    }, 150);
+  }
 }
 
-function setupKeypad() {
-  document.querySelectorAll('.key[data-val]').forEach(key => {
-    key.addEventListener('click', () => {
-      if (pin.length < 4) {
-        pin += key.getAttribute('data-val');
-        updateDots();
-        if (pin.length === 4) {
-          setTimeout(checkPin, 150);
-        }
-      }
-    });
-  });
+function goToScreen(screenId) {
+  const screens = document.querySelectorAll('.screen');
+  screens.forEach(s => s.classList.remove('active'));
 
-  document.getElementById('key-del').addEventListener('click', () => {
-    pin = pin.slice(0, -1);
+  const target = document.getElementById(screenId);
+  if (target) {
+    target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (screenId === 'screen-coupons') {
+      initScratchCards();
+    }
+  }
+}
+
+function unlockBlossom() {
+  const music = document.getElementById('bg-music');
+  if (music) {
+    music.play().catch(e => console.log("Audio waiting for user action:", e));
+  }
+  goToScreen('screen-passcode');
+}
+
+/* Keypad Logic */
+function pressKey(num) {
+  if (enteredPin.length < 4) {
+    enteredPin += num;
     updateDots();
-  });
+
+    if (enteredPin.length === 4) {
+      setTimeout(checkPin, 200);
+    }
+  }
+}
+
+function deleteKey() {
+  if (enteredPin.length > 0) {
+    enteredPin = enteredPin.slice(0, -1);
+    updateDots();
+  }
 }
 
 function updateDots() {
   for (let i = 0; i < 4; i++) {
     const dot = document.getElementById(`dot-${i}`);
-    if (dot) dot.classList.toggle('filled', i < pin.length);
+    if (dot) {
+      if (i < enteredPin.length) {
+        dot.classList.add('filled');
+      } else {
+        dot.classList.remove('filled');
+      }
+    }
   }
 }
 
 function checkPin() {
-  if (pin === correctPin) {
-    document.getElementById('screen-lock').classList.remove('active');
-    const main = document.getElementById('screen-main');
-    main.classList.add('active');
-    
-    initCards();
-    initScratchCards();
-
-    if (typeof confetti === 'function') {
-      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-    }
+  if (enteredPin === correctPin) {
+    goToScreen('screen-intro');
   } else {
-    alert('Incorrect passkey! Try again.');
-    pin = '';
+    alert("Incorrect passcode! Check the hint 😉");
+    enteredPin = "";
     updateDots();
   }
 }
 
-function setupCandle() {
-  document.getElementById('flame').addEventListener('click', blowOutCandle);
-  document.getElementById('tap-blow-btn').addEventListener('click', blowOutCandle);
-  document.getElementById('mic-btn').addEventListener('click', startMicBlow);
+function playfulNo() {
+  alert("Wrong choice! Tapping Yes for you 😉❤️");
+  goToScreen('screen-photos');
 }
 
-function blowOutCandle() {
-  if (candleBlown) return;
-  candleBlown = true;
-  document.getElementById('flame').style.display = 'none';
-  document.getElementById('candle-controls').style.display = 'none';
-  document.getElementById('wish-success').style.display = 'block';
-  document.getElementById('candle-subtitle').innerText = "Your wish has been sent into the universe! ✨";
-  
-  if (typeof confetti === 'function') {
-    confetti({ particleCount: 100, spread: 80, origin: { y: 0.5 } });
-  }
+/* 3D Flip Card */
+function flipCard(cardInner) {
+  cardInner.classList.toggle('flipped');
 }
 
-async function startMicBlow() {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const analyser = audioCtx.createAnalyser();
-    const mic = audioCtx.createMediaStreamSource(stream);
-    mic.connect(analyser);
-    analyser.fftSize = 256;
-    const data = new Uint8Array(analyser.frequencyBinCount);
+/* Swipe Photo Deck */
+function swipeTopCard(e, cardId) {
+  e.stopPropagation();
+  const card = document.getElementById(cardId);
+  if (card && !card.classList.contains('swiped')) {
+    card.classList.add('swiped');
+    swipedCards++;
 
-    function check() {
-      if (candleBlown) return;
-      analyser.getByteFrequencyData(data);
-      let sum = data.reduce((a, b) => a + b, 0);
-      if (sum / data.length > 38) {
-        blowOutCandle();
-        stream.getTracks().forEach(t => t.stop());
-      } else {
-        requestAnimationFrame(check);
-      }
+    if (swipedCards >= totalCards) {
+      const stack = document.getElementById('card-stack');
+      const sub = document.getElementById('deck-sub');
+      if (stack) stack.classList.add('shrink');
+      if (sub) sub.style.display = 'none';
+      document.getElementById('photo-finish-btn').style.display = 'block';
     }
-    check();
-  } catch (e) {
-    alert("Mic access unavailable. Tap the flame or button instead!");
   }
 }
 
-function initCards() {
-  const deck = document.getElementById('card-deck');
-  deck.innerHTML = '';
-  cardsData.forEach((c, idx) => {
-    const card = document.createElement('div');
-    card.className = 'card-item';
-    card.style.zIndex = cardsData.length - idx;
-    card.innerHTML = `
-      <div class="card-front">
-        <img src="${c.img}" alt="Photo" onerror="this.src='https://via.placeholder.com/300x200?text=Photo+${idx+1}'">
-        <p style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:1.05rem; color:#702632;">${c.caption}</p>
-        <button class="btn btn-secondary swipe-btn">Next ➔</button>
-      </div>
-      <div class="card-back">
-        <h3 style="font-size:1.3rem; margin-bottom:8px;">${c.title}</h3>
-        <p style="font-size:0.85rem; color:#555; line-height:1.4;">${c.text}</p>
-      </div>
-    `;
-
-    card.querySelector('.swipe-btn').addEventListener('click', (e) => {
-      e.stopPropagation();
-      card.classList.add('swiped');
-    });
-
-    card.addEventListener('click', () => {
-      card.classList.toggle('flipped');
-    });
-
-    deck.appendChild(card);
-  });
+function openEnvelope() {
+  const scroll = document.getElementById('letter-scroll');
+  if (scroll) scroll.classList.add('active');
 }
 
-function setupJar() {
-  document.getElementById('jar-card').addEventListener('click', () => {
-    const rand = jarNotes[Math.floor(Math.random() * jarNotes.length)];
-    document.getElementById('jar-text').innerText = `"${rand}"`;
-  });
-}
-
+/* Scratch-Off Canvas Logic */
 function initScratchCards() {
-  [0, 1, 2].forEach(idx => {
-    const canvas = document.getElementById(`scratch-${idx}`);
-    if (!canvas) return;
+  ['canvas-1', 'canvas-2', 'canvas-3'].forEach(id => {
+    const canvas = document.getElementById(id);
+    if (!canvas || canvas.dataset.inited) return;
+    canvas.dataset.inited = "true";
+
     const ctx = canvas.getContext('2d');
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
     ctx.fillStyle = '#f8bbd0';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#702632';
-    ctx.font = '12px Plus Jakarta Sans';
+    
+    ctx.font = '14px Poppins, sans-serif';
+    ctx.fillStyle = '#880e4f';
     ctx.textAlign = 'center';
-    ctx.fillText('✨ Scratch to Reveal ✨', canvas.width / 2, canvas.height / 2 + 4);
+    ctx.fillText('✨ Scratch to Reveal ✨', canvas.width / 2, canvas.height / 2 + 5);
 
-    let drawing = false;
-    const scratch = (e) => {
-      if (!drawing) return;
+    let isDrawing = false;
+
+    function scratch(e) {
+      if (!isDrawing) return;
       const rect = canvas.getBoundingClientRect();
       const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
       const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+
       ctx.globalCompositeOperation = 'destination-out';
       ctx.beginPath();
-      ctx.arc(x, y, 16, 0, Math.PI * 2);
+      ctx.arc(x, y, 18, 0, Math.PI * 2);
       ctx.fill();
-    };
+    }
 
-    ['mousedown', 'touchstart'].forEach(evt => canvas.addEventListener(evt, (e) => { drawing = true; scratch(e); }));
+    ['mousedown', 'touchstart'].forEach(evt => canvas.addEventListener(evt, (e) => { isDrawing = true; scratch(e); }));
     ['mousemove', 'touchmove'].forEach(evt => canvas.addEventListener(evt, scratch));
-    ['mouseup', 'touchend'].forEach(evt => canvas.addEventListener(evt, () => drawing = false));
+    ['mouseup', 'touchend'].forEach(evt => canvas.addEventListener(evt, () => isDrawing = false));
   });
 }
+
+/* Parallax Tilt Physics */
+document.addEventListener('mousemove', (e) => {
+  const cards = document.querySelectorAll('.tilt-card');
+  const x = (window.innerWidth / 2 - e.pageX) / 30;
+  const y = (window.innerHeight / 2 - e.pageY) / 30;
+
+  cards.forEach(card => {
+    card.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+  });
+});
+
+/* Floating Petals Physics */
+function initPetals() {
+  const canvas = document.getElementById('petals-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
+
+  const petals = Array.from({ length: 25 }, () => ({
+    x: Math.random() * width,
+    y: Math.random() * height,
+    size: Math.random() * 8 + 6,
+    speedY: Math.random() * 1 + 0.5,
+    speedX: Math.random() * 0.5 - 0.25,
+    rotation: Math.random() * 360,
+    rotSpeed: Math.random() * 2 - 1
+  }));
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+
+    petals.forEach(p => {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.rotation * Math.PI) / 180);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, p.size, p.size / 2, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      p.y += p.speedY;
+      p.x += p.speedX;
+      p.rotation += p.rotSpeed;
+
+      if (p.y > height) {
+        p.y = -10;
+        p.x = Math.random() * width;
+      }
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+}
+
+/* Music Player Controls */
+function toggleAudio() {
+  const music = document.getElementById('bg-music');
+  const btn = document.getElementById('audio-toggle-btn');
+
+  if (music) {
+    if (music.paused) {
+      music.play();
+      if (btn) btn.innerText = "⏸️";
+    } else {
+      music.pause();
+      if (btn) btn.innerText = "▶️";
+    }
+  }
+}
+
+/* Candle Blowout */
+document.addEventListener('DOMContentLoaded', () => {
+  initPetals();
+
+  const micBtn = document.getElementById('mic-btn');
+  const flame = document.getElementById('candle-flame');
+
+  if (micBtn) micBtn.addEventListener('click', enableMic);
+  if (flame) flame.addEventListener('click', triggerBlowout);
+});
+
+async function enableMic() {
+  const status = document.getElementById('mic-status');
+  const btn = document.getElementById('mic-btn');
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioContext.createAnalyser();
+    microphone = audioContext.createMediaStreamSource(stream);
+
+    analyser.fftSize = 256;
+    microphone.connect(analyser);
+
+    if (status) status.innerText = "🎙️ Mic active! BLOW into your mic now!";
+    if (btn) btn.style.display = "none";
+
+    listenForBlow();
+  } catch (err) {
+    if (status) status.innerText = "Mic blocked. Tap the flame directly to blow it out!";
+  }
+}
+
+function listenForBlow() {
+  if (isBlown || !analyser) return;
+
+  const dataArray = new Uint8Array(analyser.frequencyBinCount);
+  analyser.getByteFrequencyData(dataArray);
+
+  let totalVolume = 0;
+  for (let i = 0; i < dataArray.length; i++) {
+    totalVolume += dataArray[i];
+  }
+  let averageVolume = totalVolume / dataArray.length;
+
+  if (averageVolume > 38) {
+    triggerBlowout();
+    return;
+  }
+
+  requestAnimationFrame(listenForBlow);
+}
+
+function triggerBlowout() {
+  if (isBlown) return;
+  isBlown = true;
+
+  const flame = document.getElementById('candle-flame');
+  const status = document.getElementById('mic-status');
+  const modal = document.getElementById('wish-modal');
+
+  if (flame) flame.classList.add('out');
+  if (status) status.innerText = "✨ Wish granted! ✨";
+
+  if (typeof confetti === 'function') {
+    confetti({
+      particleCount: 120,
+      spread: 70,
+      origin: { y: 0.7 },
+      colors: ['#ec407a', '#f8bbd0', '#ffda79', '#ffffff']
+    });
+  }
+
+  setTimeout(() => {
+    if (modal) modal.classList.add('active');
+  }, 700);
+}
+
+function closeWishModal() {
+  const modal = document.getElementById('wish-modal');
+  if (modal) modal.classList.remove('active');
+}
+
