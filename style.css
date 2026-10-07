@@ -172,10 +172,12 @@ h2 { font-size: 1.6rem; font-weight: 600; margin-bottom: 6px; }
   display: none;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
 }
 
 .main-content.active {
-  display: flex;
+  display: flex !important;
+  animation: fadeIn 0.5s ease-out forwards;
 }
 
 /* Cake & Candle */
