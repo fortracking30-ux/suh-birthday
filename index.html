@@ -3,46 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Happy Birthday Suh! 🌸</title>
+  <title>For You | Birthday Special</title>
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
-  <!-- Floating Petals Canvas Background -->
+  <!-- Floating Background Canvas -->
   <canvas id="petals-canvas"></canvas>
 
-  <!-- Background Music -->
-  <audio id="bg-music" loop preload="auto">
-    <source src="song.mp3" type="audio/mpeg">
-  </audio>
+  <div class="main-wrapper">
 
-  <div class="app-container">
-
-    <!-- SCREEN 1: TOUCH THE BLOSSOM -->
-    <div class="screen active" id="screen-blossom">
-      <div class="blossom-wrapper" onclick="unlockBlossom()">
-        <div class="blossom-flower">🌸</div>
-        <p class="blossom-text">Touch the blossom</p>
+    <!-- STEP 1: GIFT BOX OPENING -->
+    <section id="sec-gift" class="flow-step active">
+      <div class="gift-box-wrapper" onclick="openGift()">
+        <div class="gift-emoji">🎁</div>
+        <h1 class="gift-title">A special surprise for you...</h1>
+        <p class="tap-hint">(Tap the gift box to open)</p>
       </div>
-    </div>
+    </section>
 
-    <!-- SCREEN 2: PASSCODE KEYPAD -->
-    <div class="screen" id="screen-passcode">
-      <div class="card passcode-card tilt-card">
-        <div class="card-flower">🌸</div>
-        <h2 class="passcode-title">For my favorite person</h2>
-        <p class="passcode-subtitle">Happiest Birthday ✨</p>
-
+    <!-- STEP 2: LOCK / PASSKEY SCREEN -->
+    <section id="sec-lock" class="flow-step">
+      <div class="glass-card">
+        <div class="lock-icon">🔒</div>
+        <h2>Enter Passkey</h2>
+        <p class="sub-text">Enter the secret 4-digit pin</p>
+        
         <div class="pin-dots">
           <span class="dot" id="dot-0"></span>
           <span class="dot" id="dot-1"></span>
           <span class="dot" id="dot-2"></span>
           <span class="dot" id="dot-3"></span>
         </div>
-
-        <p class="passcode-hint">Hint: What's the date today? 🗓️</p>
 
         <div class="keypad">
           <button onclick="pressKey('1')">1</button>
@@ -56,261 +49,135 @@
           <button onclick="pressKey('9')">9</button>
           <button class="empty-key"></button>
           <button onclick="pressKey('0')">0</button>
-          <button class="back-key" onclick="deleteKey()">⌫</button>
+          <button onclick="deleteKey()">⌫</button>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- SCREEN 3: INTRO SURPRISE QUESTION -->
-    <div class="screen" id="screen-intro">
-      <div class="card intro-card tilt-card">
-        <div class="decorative-hearts">🌸 🤍 🌸</div>
-        <h1 class="question-title">ARE YOU READY FOR A LITTLE SURPRISE? 👀</h1>
-        <div class="btn-group">
-          <button class="btn-choice" onclick="goToScreen('screen-photos')">Yes ❤</button>
-          <button class="btn-choice" onclick="goToScreen('screen-photos')">Of Course 😍</button>
-          <button class="btn-choice no-btn" onclick="playfulNo()">No 😂</button>
-        </div>
+    <!-- STEP 3: MAIN EXPERIENCE -->
+    <section id="sec-main" class="flow-step">
+      
+      <!-- HEADER & QUOTE CARD -->
+      <div class="hero-card">
+        <h1 class="main-heading">Happy Birthday, Suh! ✨</h1>
+        <p class="quote-text">"Distance means so little when a friendship means so much."</p>
       </div>
-    </div>
 
-    <!-- SCREEN 4: 3D FLIP STACKED PHOTO DECK -->
-    <div class="screen" id="screen-photos">
-      <div class="card photo-deck-card tilt-card" id="photo-deck-card">
-        <h2 class="section-title">The Prettiest Human 📸</h2>
-        <p class="deck-subtitle" id="deck-sub">Tap photo to flip 🔄 | Tap 'Swipe ➔' to see next</p>
+      <!-- FEATURE 1: 3D POLAROID DECK WITH BACKSIDE MESSAGES -->
+      <div class="section-container">
+        <h2 class="section-title">Favorite Moments 📸</h2>
+        <p class="section-sub">Tap photo to flip for a note, or swipe to reveal next</p>
 
         <div class="card-stack" id="card-stack">
-          
-          <!-- Lily Reveal Card -->
-          <div class="lily-completion-card" id="lily-completion-card">
-            <div class="lily-icon">⚜️ 🌸 ⚜️</div>
-            <h3>Those are all my favorite pictures of you for now! ✨</h3>
-            <p>Ready to read your birthday message? 💌</p>
-          </div>
-
-          <!-- Card 5 -->
-          <div class="stacked-card" id="scard-5">
+          <!-- Card 1 -->
+          <div class="stacked-card" id="card-1" style="z-index: 5;">
             <div class="card-inner" onclick="flipCard(this)">
               <div class="card-front">
-                <div class="photo-wrapper"><img src="photo5.jpg" alt="Suh 5"></div>
-                <p class="card-caption">"Even the moon would take a step back next to this."</p>
-                <span class="flip-hint">🔄 Tap photo to flip note</span>
+                <div class="photo-wrapper"><img src="photo1.jpg" alt="Photo 1"></div>
+                <p class="card-caption">Endless Late Chats ✨</p>
+                <button class="btn-swipe-card" onclick="swipeTopCard(event, 'card-1')">Swipe ➔</button>
               </div>
               <div class="card-back">
-                <div class="back-content">
-                  <h3>Note #5 🌙</h3>
-                  <p>A constant reminder of how effortlessly you brighten up every single place you walk into.</p>
-                </div>
+                <h3>A Special Note 💌</h3>
+                <p>Thank you for bringing so much brightness and spontaneous laughter into every single conversation!</p>
               </div>
             </div>
-            <button class="btn-swipe-card" onclick="swipeTopCard(event, 'scard-5')">Swipe Next ➔</button>
-          </div>
-
-          <!-- Card 4 -->
-          <div class="stacked-card" id="scard-4">
-            <div class="card-inner" onclick="flipCard(this)">
-              <div class="card-front">
-                <div class="photo-wrapper"><img src="photo4.jpg" alt="Suh 4"></div>
-                <p class="card-caption">"Only at the 4th slide and I'm already lost for words."</p>
-                <span class="flip-hint">🔄 Tap photo to flip note</span>
-              </div>
-              <div class="card-back">
-                <div class="back-content">
-                  <h3>Note #4 ✨</h3>
-                  <p>Literally no words needed here. Pure good vibes and timeless energy!</p>
-                </div>
-              </div>
-            </div>
-            <button class="btn-swipe-card" onclick="swipeTopCard(event, 'scard-4')">Swipe Next ➔</button>
-          </div>
-
-          <!-- Card 3 -->
-          <div class="stacked-card" id="scard-3">
-            <div class="card-inner" onclick="flipCard(this)">
-              <div class="card-front">
-                <div class="photo-wrapper"><img src="photo3.jpg" alt="Suh 3"></div>
-                <p class="card-caption">"The 8th wonder of the world."</p>
-                <span class="flip-hint">🔄 Tap photo to flip note</span>
-              </div>
-              <div class="card-back">
-                <div class="back-content">
-                  <h3>Note #3 🏛️</h3>
-                  <p>Undisputed main character energy! Keep shining always!</p>
-                </div>
-              </div>
-            </div>
-            <button class="btn-swipe-card" onclick="swipeTopCard(event, 'scard-3')">Swipe Next ➔</button>
           </div>
 
           <!-- Card 2 -->
-          <div class="stacked-card" id="scard-2">
+          <div class="stacked-card" id="card-2" style="z-index: 4;">
             <div class="card-inner" onclick="flipCard(this)">
               <div class="card-front">
-                <div class="photo-wrapper"><img src="photo2.jpg" alt="Suh 2"></div>
-                <p class="card-caption">"A smile that could end any war."</p>
-                <span class="flip-hint">🔄 Tap photo to flip note</span>
+                <div class="photo-wrapper"><img src="photo2.jpg" alt="Photo 2"></div>
+                <p class="card-caption">Good Vibes Always 🌸</p>
+                <button class="btn-swipe-card" onclick="swipeTopCard(event, 'card-2')">Swipe ➔</button>
               </div>
               <div class="card-back">
-                <div class="back-content">
-                  <h3>Note #2 😊</h3>
-                  <p>Your smile genuinely has the best contagious positivity!</p>
-                </div>
+                <h3>Always Dependable 🌟</h3>
+                <p>Whether it's long conversations or quick catch-ups, chatting with you is always the best part of the day.</p>
               </div>
             </div>
-            <button class="btn-swipe-card" onclick="swipeTopCard(event, 'scard-2')">Swipe Next ➔</button>
           </div>
 
-          <!-- Card 1 -->
-          <div class="stacked-card" id="scard-1">
+          <!-- Card 3 -->
+          <div class="stacked-card" id="card-3" style="z-index: 3;">
             <div class="card-inner" onclick="flipCard(this)">
               <div class="card-front">
-                <div class="photo-wrapper"><img src="photo1.jpg" alt="Suh 1"></div>
-                <p class="card-caption">"The only goddess I'm a theist for."</p>
-                <span class="flip-hint">🔄 Tap photo to flip note</span>
+                <div class="photo-wrapper"><img src="photo3.jpg" alt="Photo 3"></div>
+                <p class="card-caption">Main Character Energy 🤍</p>
+                <button class="btn-swipe-card" onclick="swipeTopCard(event, 'card-3')">Swipe ➔</button>
               </div>
               <div class="card-back">
-                <div class="back-content">
-                  <h3>Note #1 🌸</h3>
-                  <p>Starting off with one of the most aesthetic pictures ever taken.</p>
-                </div>
+                <h3>Truly One of a Kind ✨</h3>
+                <p>Never lose your effortless charm, incredible sense of humor, and amazing vibe!</p>
               </div>
             </div>
-            <button class="btn-swipe-card" onclick="swipeTopCard(event, 'scard-1')">Swipe Next ➔</button>
           </div>
-
-        </div>
-
-        <button class="btn-next highlight" id="photo-finish-btn" style="display: none;" onclick="goToScreen('screen-envelope')">Open Your Letter 💌</button>
-      </div>
-    </div>
-
-    <!-- SCREEN 5: ENVELOPE & LETTER -->
-    <div class="screen" id="screen-envelope">
-      <div class="card envelope-card tilt-card">
-        <h2 class="section-title">A Letter, Just For You ✉️</h2>
-        <p class="envelope-subtitle">Tap the envelope to open</p>
-
-        <div class="interactive-envelope" onclick="openEnvelope()">
-          <div class="envelope-seal">🌸</div>
-        </div>
-
-        <div class="letter-scroll" id="letter-scroll">
-          <h3 class="letter-header">Happiest birthday Suhani,</h3>
-          <p class="letter-body">
-            Talking to you is always the best part of my routine.<br><br>
-            My biggest wish for you today (and always) is simple: to see you happy, smiling, and feeling as special as you truly are to me. Have the most amazing birthday! 🤍
-          </p>
-
-          <button class="btn-next" onclick="goToScreen('screen-jar')">Open The Note Jar 🫙 ➔</button>
         </div>
       </div>
-    </div>
 
-    <!-- SCREEN 6: REASONS YOU'RE AWESOME JAR -->
-    <div class="screen" id="screen-jar">
-      <div class="card jar-card tilt-card">
-        <h2 class="section-title">Little Note Jar 🫙</h2>
-        <p class="deck-subtitle">Tap the jar to draw a little note!</p>
+      <!-- FEATURE 2: SCROLLABLE LETTER -->
+      <div class="section-container">
+        <div class="letter-card">
+          <h2 class="letter-title">A Little Note From Me To You 📝</h2>
+          <div class="letter-body">
+            <p>Dear Suh,</p>
+            <p>Writing this little note just because you deserve all the warmth and joy today! Thank you for being such an extraordinary friend, for sharing the best giggles, and for making conversations feel so easy and fun even from afar.</p>
+            <p>I hope this year brings you infinite success, happiness, and all the sweet moments you've been wishing for. Stay the wonderful person you are!</p>
+            <p class="letter-sign">— Always your friend ✨</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FEATURE 3: JAR NOTES FEATURE -->
+      <div class="section-container">
+        <h2 class="section-title">Jar of Virtual Reasons 🫙</h2>
+        <p class="section-sub">Tap the jar whenever you need a quick smile!</p>
 
         <div class="jar-wrapper" onclick="drawJarNote()">
-          <div class="jar-icon">🏺</div>
-          <p class="jar-tap-hint">✨ Tap to pull a note ✨</p>
+          <div class="jar-icon">🫙</div>
+          <div class="jar-note-display">
+            <p id="jar-note-text">"Tap the jar to pull out a note!"</p>
+          </div>
         </div>
-
-        <div class="jar-note-display" id="jar-note-box">
-          <p id="jar-note-text">"Tap the jar above to unlock a reason why you're awesome!"</p>
-        </div>
-
-        <button class="btn-next highlight" style="margin-top:20px;" onclick="goToScreen('screen-coupons')">Claim Your Birthday Perks 🎟️ ➔</button>
       </div>
-    </div>
 
-    <!-- SCREEN 7: SCRATCH-OFF COUPONS -->
-    <div class="screen" id="screen-coupons">
-      <div class="card coupon-card tilt-card">
-        <h2 class="section-title">Scratch & Claim 🎁</h2>
-        <p class="deck-subtitle">Scratch with your finger to reveal your birthday coupons! (Pick any two 😉)</p>
+      <!-- FEATURE 4: SCRATCH PERKS -->
+      <div class="section-container">
+        <h2 class="section-title">Virtual Birthday Coupons 🎟️</h2>
+        <p class="section-sub">Scratch below to claim your birthday perks!</p>
 
         <div class="coupons-grid">
-          
-          <!-- Coupon 1 -->
           <div class="scratch-container">
             <div class="scratch-reward">
-              <span class="reward-icon">🍦</span>
-              <p class="reward-text">1x Free Ice Cream / Treat On Me!</p>
+              <span class="reward-icon">☕</span>
+              <span class="reward-text">Virtual Coffee & Late Night Gossip Session</span>
             </div>
-            <canvas class="scratch-canvas" id="canvas-1"></canvas>
+            <canvas id="canvas-1" class="scratch-canvas"></canvas>
           </div>
 
-          <!-- Coupon 2 -->
           <div class="scratch-container">
             <div class="scratch-reward">
-              <span class="reward-icon">🎡</span>
-              <p class="reward-text">1 Day at PUNO!</p>
+              <span class="reward-icon">🍔</span>
+              <span class="reward-text">Food Delivery Treat: Dinner On Me</span>
             </div>
-            <canvas class="scratch-canvas" id="canvas-2"></canvas>
+            <canvas id="canvas-2" class="scratch-canvas"></canvas>
           </div>
 
-          <!-- Coupon 3 -->
           <div class="scratch-container">
             <div class="scratch-reward">
-              <span class="reward-icon">🧠</span>
-              <p class="reward-text">1x Reasoning Solving Session!</p>
+              <span class="reward-icon">🎬</span>
+              <span class="reward-text">Online Watch Party / Movie Night Pass</span>
             </div>
-            <canvas class="scratch-canvas" id="canvas-3"></canvas>
+            <canvas id="canvas-3" class="scratch-canvas"></canvas>
           </div>
-
         </div>
-
-        <button class="btn-next highlight" style="margin-top:20px;" onclick="goToScreen('screen-cake')">Make A Wish 🎂 ➔</button>
       </div>
-    </div>
 
-    <!-- SCREEN 8: CAKE BLOWOUT & MUSIC PLAYER -->
-    <div class="screen" id="screen-cake">
-      <div class="card cake-card tilt-card">
-        <h2 class="section-title">Make a Wish 🎂</h2>
-        <p class="cake-instruction">Blow into your mic or tap the flame!</p>
-
-        <div class="interactive-cake">
-          <div class="candle">
-            <div class="flame" id="candle-flame"></div>
-          </div>
-          <div class="cake-top"></div>
-          <div class="cake-base"></div>
-        </div>
-
-        <div class="status-box" id="mic-status">Tap below to activate mic 🎙️</div>
-        <button class="btn-mic" id="mic-btn">Activate Mic & Blow Candle ✨</button>
-
-        <div class="music-player-widget">
-          <div class="music-info">
-            <span class="music-icon">🎵</span>
-            <div class="music-text">
-              <p class="song-title" id="song-title">O Rangrez</p>
-              <p class="artist-name">Shreya Ghoshal, Javed Bashir</p>
-            </div>
-          </div>
-          <button class="btn-play-pause" id="audio-toggle-btn" onclick="toggleAudio()">⏸️</button>
-        </div>
-
-      </div>
-    </div>
-
+    </section>
   </div>
 
-  <!-- SURPRISE POPUP MODAL -->
-  <div class="modal-overlay" id="wish-modal">
-    <div class="modal-card">
-      <div class="modal-header">🎉 Wish Granted! 🎉</div>
-      <p class="modal-body">
-        Hey Suhh! Hope this made you feel a little special... Happy birthday again! Keep smiling! 🤍
-      </p>
-      <button class="btn-close-modal" onclick="closeWishModal()">Close & Enjoy ❤</button>
-    </div>
-  </div>
-
+  <audio id="bg-music" loop src="song.mp3"></audio>
   <script src="script.js"></script>
 </body>
 </html>
