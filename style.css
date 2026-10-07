@@ -1,22 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg-color: #fdf5f7;
+  --primary: #d85d7c;
+  --primary-dark: #702632;
+  --glass-bg: rgba(255, 255, 255, 0.82);
+  --glass-border: rgba(255, 255, 255, 0.9);
+  --shadow: 0 12px 30px rgba(216, 93, 124, 0.12);
+  --radius: 24px;
+}
 
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: 'Plus Jakarta Sans', sans-serif;
   -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background: #fdf6f0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg-color);
   color: #4a2e35;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  padding: 24px 12px;
   overflow-x: hidden;
-  position: relative;
 }
 
 #petals-canvas {
@@ -31,108 +41,102 @@ body {
 
 .main-wrapper {
   width: 100%;
-  max-width: 440px;
-  min-height: 100vh;
-  position: relative;
-  z-index: 2;
-  padding: 20px 16px;
-  margin: 0 auto;
-}
-
-/* FLOW STEPS */
-.flow-step {
-  display: none;
-  width: 100%;
-}
-
-.flow-step.active {
+  max-width: 420px;
+  z-index: 10;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 20px;
 }
 
-/* STEP 1: GIFT BOX OPENING */
-#sec-gift {
-  min-height: 90vh;
-  justify-content: center;
-}
-
-.gift-box-wrapper {
+/* Glass Card Component */
+.card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  box-shadow: var(--shadow);
   text-align: center;
-  cursor: pointer;
-  animation: floatGift 3s ease-in-out infinite;
+  display: none;
+  animation: fadeIn 0.5s ease-out forwards;
 }
 
-.gift-emoji {
-  font-size: 6rem;
-  filter: drop-shadow(0 15px 25px rgba(224, 122, 148, 0.4));
+.card.active {
+  display: block;
 }
 
-.gift-title {
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h1, h2, h3 {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 2.2rem;
-  color: #8c3a50;
-  margin-top: 20px;
+  color: var(--primary-dark);
 }
 
-.tap-hint {
-  font-size: 0.9rem;
-  color: #b36b7d;
-  margin-top: 8px;
+h1 { font-size: 2.2rem; font-weight: 600; margin-bottom: 6px; }
+h2 { font-size: 1.6rem; font-weight: 600; margin-bottom: 6px; }
+
+.subtitle {
+  font-size: 0.88rem;
+  color: #8c5a65;
+  margin-bottom: 16px;
 }
 
-@keyframes floatGift {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+.badge {
+  display: inline-block;
+  background: #ffe3ec;
+  color: var(--primary-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* STEP 2: LOCK CARD */
-#sec-lock {
-  min-height: 90vh;
-  justify-content: center;
+.quote {
+  font-style: italic;
+  font-size: 0.92rem;
+  color: #702632;
 }
 
-.glass-card {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  border-radius: 32px;
-  padding: 30px 20px;
-  text-align: center;
-  box-shadow: 0 20px 40px rgba(180, 100, 120, 0.12);
+/* Step 1: Gift */
+.gift-icon {
+  font-size: 5rem;
+  cursor: pointer;
+  margin: 10px 0;
+  animation: float 2s ease-in-out infinite;
 }
 
-.lock-icon { 
-  font-size: 2.5rem; 
-  margin-bottom: 10px; 
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-12px) scale(1.05); }
 }
 
-.sub-text {
-  font-size: 0.85rem;
-  color: #b36b7d;
-  margin-top: 4px;
-}
+/* Step 2: Lock Keypad */
+.lock-icon { font-size: 2.8rem; margin-bottom: 8px; }
 
-.pin-dots {
+.pin-display {
   display: flex;
   justify-content: center;
-  gap: 16px;
-  margin: 20px 0;
+  gap: 12px;
+  margin: 18px 0 24px;
 }
 
 .dot {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  border: 2px solid #e07a94;
-  background: transparent;
-  transition: all 0.2s ease;
+  border: 2px solid var(--primary);
+  transition: background 0.2s;
 }
 
 .dot.filled {
-  background: #e07a94;
-  box-shadow: 0 0 10px rgba(224, 122, 148, 0.6);
+  background: var(--primary);
 }
 
 .keypad {
@@ -143,273 +147,221 @@ body {
   margin: 0 auto;
 }
 
-.keypad button {
-  height: 52px;
-  border-radius: 50%;
+.key {
+  background: #ffffff;
   border: none;
-  background: #fff;
-  font-size: 1.2rem;
-  color: #4a2e35;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  border-radius: 50px;
+  padding: 14px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: transform 0.1s, background 0.2s;
 }
 
-.keypad button:active {
-  background: #f8bbd0;
+.key:active {
+  transform: scale(0.94);
+  background: #ffe3ec;
 }
 
-.keypad button.empty-key { 
-  visibility: hidden; 
+.key.empty { visibility: hidden; }
+
+/* Step 3: Main Experience Wrapper */
+.main-content {
+  display: none;
+  flex-direction: column;
+  gap: 20px;
 }
 
-/* STEP 3: MAIN FLOW */
-.hero-card {
-  text-align: center;
-  margin: 20px 0 30px 0;
+.main-content.active {
+  display: flex;
 }
 
-.main-heading {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 2.5rem;
-  color: #8c3a50;
-}
-
-.quote-text {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.2rem;
-  font-style: italic;
-  color: #b36b7d;
-  margin-top: 8px;
-}
-
-.section-container {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 28px;
-  padding: 24px 18px;
-  margin-bottom: 24px;
-  border: 1px solid #f3e1e5;
-  box-shadow: 0 10px 25px rgba(224, 122, 148, 0.08);
-  text-align: center;
-}
-
-.section-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.8rem;
-  color: #8c3a50;
-}
-
-.section-sub {
-  font-size: 0.82rem;
-  color: #b36b7d;
-  margin-bottom: 16px;
-}
-
-/* 3D PHOTO FLIP DECK */
-.card-stack {
+/* Cake & Candle */
+.cake-wrapper {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0 15px;
+}
+
+.flame {
+  width: 16px;
+  height: 26px;
+  background: radial-gradient(ellipse at bottom, #ffeb3b 0%, #ff9800 60%, #f44336 100%);
+  border-radius: 50% 50% 20% 20%;
+  box-shadow: 0 0 14px rgba(255, 152, 0, 0.9);
+  cursor: pointer;
+  animation: flicker 0.15s infinite alternate;
+}
+
+@keyframes flicker {
+  0% { transform: scale(1) rotate(-1deg); }
+  100% { transform: scale(1.1) rotate(1deg); }
+}
+
+.candle {
+  width: 12px;
+  height: 45px;
+  background: #f48fb1;
+  border-radius: 4px;
+  margin-top: 2px;
+}
+
+.cake { font-size: 3.5rem; margin-top: -12px; }
+
+.wish-controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 30px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.action-btn:active { transform: scale(0.96); }
+
+.action-btn.secondary {
+  background: #ffe3ec;
+  color: var(--primary-dark);
+}
+
+.hidden-msg {
+  display: none;
+  margin-top: 15px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  font-size: 0.95rem;
+}
+
+/* 3D Photo Deck */
+.deck-container {
+  position: relative;
+  height: 320px;
   width: 100%;
-  height: 380px;
+  perspective: 1000px;
   margin-top: 10px;
 }
 
-.stacked-card {
+.card-item {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  perspective: 1000px;
-  transition: transform 0.6s ease, opacity 0.5s ease;
-}
-
-.stacked-card.swiped {
-  transform: translateX(120%) rotate(25deg) scale(0.85) !important;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: 24px;
+  inset: 0;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s;
   transform-style: preserve-3d;
-  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
   cursor: pointer;
 }
 
-.card-inner.flipped { 
-  transform: rotateY(180deg); 
-}
+.card-item.flipped { transform: rotateY(180deg); }
+.card-item.swiped { transform: translateX(120%) rotate(25deg); opacity: 0; pointer-events: none; }
 
 .card-front, .card-back {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  border-radius: 24px;
-  background: #fff;
+  border-radius: 18px;
   padding: 14px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+  justify-content: space-between;
 }
 
-.photo-wrapper {
+.card-front img {
   width: 100%;
-  height: 75%;
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.photo-wrapper img {
-  width: 100%;
-  height: 100%;
+  height: 200px;
   object-fit: cover;
+  border-radius: 12px;
 }
 
 .card-caption {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.2rem;
-  font-style: italic;
-  color: #8c3a50;
-}
-
-.btn-swipe-card {
-  padding: 6px 16px;
-  border-radius: 16px;
-  border: none;
-  background: #f8bbd0;
-  color: #8c3a50;
   font-weight: 600;
-  font-size: 0.8rem;
-  cursor: pointer;
+  font-size: 1.15rem;
+  color: var(--primary-dark);
 }
 
 .card-back {
+  background: #fff5f7;
   transform: rotateY(180deg);
-  background: #fff5f8;
   justify-content: center;
+  text-align: center;
   padding: 24px;
 }
 
-.card-back h3 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.6rem;
-  color: #8c3a50;
-  margin-bottom: 12px;
+.card-back p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #555;
+  margin-top: 8px;
 }
 
-.card-back p {
-  font-size: 0.92rem;
+/* Handwritten Letter */
+.letter-body {
+  text-align: left;
+  font-size: 0.9rem;
   line-height: 1.6;
   color: #4a2e35;
+  padding: 0 4px;
 }
 
-/* LETTER */
-.letter-card { 
-  text-align: left; 
-}
+.letter-body p { margin-bottom: 12px; }
+.signature { font-weight: 700; color: var(--primary-dark); }
 
-.letter-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.6rem;
-  color: #8c3a50;
-  margin-bottom: 12px;
-  text-align: center;
-}
+/* Jar Section */
+.jar-card { cursor: pointer; }
+.jar-emoji { font-size: 3.5rem; margin-bottom: 10px; transition: transform 0.2s; }
+.jar-card:active .jar-emoji { transform: scale(1.15) rotate(-5deg); }
 
-.letter-body p {
-  font-size: 0.92rem;
-  line-height: 1.65;
-  color: #4a2e35;
-  margin-bottom: 12px;
-}
-
-.letter-sign {
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
-  font-weight: 600;
-  color: #8c3a50;
-  margin-top: 15px;
-}
-
-/* JAR */
-.jar-wrapper { 
-  cursor: pointer; 
-  margin: 10px 0; 
-}
-
-.jar-icon { 
-  font-size: 4.5rem; 
-  margin-bottom: 10px; 
-}
-
-.jar-note-display {
-  min-height: 80px;
+.jar-display {
   background: #fff;
-  border-radius: 18px;
+  border: 1.5px dashed var(--primary);
+  border-radius: 14px;
   padding: 16px;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--primary-dark);
+  min-height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px dashed #e07a94;
 }
 
-#jar-note-text {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.2rem;
-  font-style: italic;
-  color: #8c3a50;
-  transition: opacity 0.2s ease;
-}
-
-/* SCRATCH PERKS */
-.coupons-grid { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 12px; 
-}
-
-.scratch-container {
+/* Scratch Coupons */
+.coupon {
   position: relative;
-  width: 100%;
-  height: 68px;
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.scratch-reward {
-  position: absolute;
-  width: 100%;
-  height: 100%;
+  height: 60px;
   background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
   display: flex;
   align-items: center;
   padding: 0 16px;
   gap: 12px;
+  margin-bottom: 12px;
 }
 
-.reward-icon { 
-  font-size: 1.6rem; 
-}
-
-.reward-text { 
-  font-size: 0.85rem; 
-  font-weight: 600; 
-  color: #4a2e35; 
-}
+.coupon-emoji { font-size: 1.4rem; }
+.coupon-title { font-size: 0.85rem; font-weight: 600; color: #4a2e35; }
 
 .scratch-canvas {
   position: absolute;
-  top: 0; 
-  left: 0;
-  width: 100%; 
+  inset: 0;
+  width: 100%;
   height: 100%;
   cursor: pointer;
 }
