@@ -5,92 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Happy Birthday, Suh! ✨</title>
   
-  <!-- Tailwind CSS & Alpine.js via CDN -->
+  <!-- Tailwind CSS & Libraries -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
-    
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #fdf6f0;
-      color: #4a2e35;
-      overflow-x: hidden;
-    }
-    
-    .font-serif-custom {
-      font-family: 'Cormorant Garamond', serif;
-    }
-
-    /* Floating Petals Canvas */
-    #petals-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 10;
-    }
-
-    /* Flower Bloom & Split Transition */
-    .flower-layer {
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      display: flex;
-      pointer-events: none;
-    }
-
-    .flower-half {
-      width: 50%;
-      height: 100%;
-      background: linear-gradient(135deg, #f8bbd0, #f48fb1);
-      transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .flower-half-left { transform: translateX(0); }
-    .flower-half-right { transform: translateX(0); }
-
-    .bloom-open .flower-half-left { transform: translateX(-100%); }
-    .bloom-open .flower-half-right { transform: translateX(100%); }
-
-    /* 3D Card Flip */
-    .perspective-1000 { perspective: 1000px; }
-    .transform-style-3d { transform-style: preserve-3d; }
-    .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-    .rotate-y-180 { transform: rotateY(180deg); }
-
-    /* Glassmorphic Cards */
-    .glass-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      box-shadow: 0 15px 35px rgba(224, 122, 148, 0.12);
-    }
-
-    /* Candle Flame Animation */
-    .flame {
-      width: 18px;
-      height: 30px;
-      background: radial-gradient(ellipse at bottom, #ffeb3b 0%, #ff9800 60%, #f44336 100%);
-      border-radius: 50% 50% 20% 20%;
-      box-shadow: 0 0 15px rgba(255, 152, 0, 0.8);
-      animation: flicker 0.1s infinite alternate;
-      margin: 0 auto;
-    }
-
-    @keyframes flicker {
-      0% { transform: scale(1) rotate(-1deg); }
-      100% { transform: scale(1.08) rotate(1deg); }
-    }
-  </style>
+  <!-- Link to your local CSS file -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles.css"> <!-- Covers either filename -->
 </head>
 <body x-data="appData()" x-init="initApp()">
 
@@ -158,7 +80,7 @@
           <p class="font-serif-custom italic text-lg text-pink-700 mt-2">"Distance means so little when a friendship means so much."</p>
         </div>
 
-        <!-- NEW FEATURE: MAKE A WISH & BLOW OUT CANDLE -->
+        <!-- MAKE A WISH & BLOW OUT CANDLE -->
         <div class="glass-card rounded-3xl p-6 text-center">
           <h2 class="font-serif-custom text-2xl font-semibold text-pink-900">Make a Wish 🎂</h2>
           <p class="text-xs text-pink-600 mb-4" x-text="candleBlown ? 'Your wish has been sent into the universe! ✨' : 'Close your eyes, make a wish, and blow into your mic (or tap below)'"></p>
@@ -188,7 +110,7 @@
           </div>
         </div>
 
-        <!-- FEATURE 1: 3D POLAROID DECK WITH BACKSIDE MESSAGES -->
+        <!-- 3D POLAROID DECK (ALL 5 PHOTOS) -->
         <div class="glass-card rounded-3xl p-5 text-center">
           <h2 class="font-serif-custom text-2xl font-semibold text-pink-900">Favorite Moments 📸</h2>
           <p class="text-xs text-pink-600 mb-4">Tap photo to flip for a note, or swipe to reveal next</p>
@@ -210,7 +132,7 @@
                     </div>
                     <p class="font-serif-custom italic text-lg text-pink-900" x-text="card.caption"></p>
                     <button @click.stop="card.swiped = true" class="px-4 py-1 rounded-full bg-pink-200 text-pink-800 text-xs font-semibold hover:bg-pink-300">
-                      Swipe ➔
+                      Next ➔
                     </button>
                   </div>
 
@@ -226,7 +148,7 @@
           </div>
         </div>
 
-        <!-- FEATURE 2: SCROLLABLE HANDWRITTEN LETTER -->
+        <!-- SCROLLABLE HANDWRITTEN LETTER -->
         <div class="glass-card rounded-3xl p-6 text-left">
           <h2 class="font-serif-custom text-2xl font-bold text-center text-pink-900 mb-3">A Little Note From Me To You 📝</h2>
           <div class="space-y-3 text-sm text-gray-700 leading-relaxed max-h-60 overflow-y-auto pr-2">
@@ -237,7 +159,7 @@
           </div>
         </div>
 
-        <!-- FEATURE 3: VIRTUAL REASONS JAR -->
+        <!-- VIRTUAL REASONS JAR -->
         <div class="glass-card rounded-3xl p-5 text-center cursor-pointer" @click="drawJarNote()">
           <h2 class="font-serif-custom text-2xl font-semibold text-pink-900">Jar of Virtual Reasons 🫙</h2>
           <p class="text-xs text-pink-600 mb-3">Tap the jar whenever you need a quick smile!</p>
@@ -248,7 +170,7 @@
           </div>
         </div>
 
-        <!-- FEATURE 4: BIRTHDAY SCRATCH PERKS -->
+        <!-- BIRTHDAY SCRATCH PERKS -->
         <div class="glass-card rounded-3xl p-5 text-center">
           <h2 class="font-serif-custom text-2xl font-semibold text-pink-900">Virtual Birthday Coupons 🎟️</h2>
           <p class="text-xs text-pink-600 mb-4">Scratch below to claim your birthday perks!</p>
@@ -257,226 +179,3 @@
             <template x-for="(coupon, idx) in coupons" :key="idx">
               <div class="relative w-full h-16 rounded-xl overflow-hidden bg-white shadow-sm flex items-center px-4 gap-3">
                 <span class="text-2xl" x-text="coupon.icon"></span>
-                <span class="text-xs font-semibold text-gray-800 text-left" x-text="coupon.text"></span>
-                <canvas :id="'scratch-' + idx" class="absolute inset-0 w-full h-full cursor-pointer z-10"></canvas>
-              </div>
-            </template>
-          </div>
-        </div>
-
-      </div>
-    </template>
-
-  </main>
-
-  <!-- Background Music Audio -->
-  <audio id="bg-music" loop src="song.mp3"></audio>
-
-  <script>
-    function appData() {
-      return {
-        step: 'gift',
-        flowerBloomed: false,
-        pin: '',
-        correctPin: '0910',
-        candleBlown: false,
-        micActive: false,
-        currentJarNote: '"Tap the jar to pull out a note!"',
-        
-        jarNotes: [
-          "✨ Your sense of humor always turns ordinary chats into the best conversations.",
-          "🌸 You bring so much positive energy every single time we talk.",
-          "✨ Thank you for being such a genuine, fun, and amazing friend.",
-          "🌸 10/10 main character energy in every text!",
-          "✨ Even across distance, your friendship means so much!"
-        ],
-
-        cards: [
-          {
-            image: 'photo1.jpg',
-            caption: 'Endless Late Chats ✨',
-            backTitle: 'A Special Note 💌',
-            backText: 'Thank you for bringing so much brightness and spontaneous laughter into every single conversation!',
-            flipped: false,
-            swiped: false
-          },
-          {
-            image: 'photo2.jpg',
-            caption: 'Good Vibes Always 🌸',
-            backTitle: 'Always Dependable 🌟',
-            backText: 'Whether it\'s long conversations or quick catch-ups, chatting with you is always the best part of the day.',
-            flipped: false,
-            swiped: false
-          },
-          {
-            image: 'photo3.jpg',
-            caption: 'Main Character Energy 🤍',
-            backTitle: 'Truly One of a Kind ✨',
-            backText: 'Never lose your effortless charm, incredible sense of humor, and amazing vibe!',
-            flipped: false,
-            swiped: false
-          }
-        ],
-
-        coupons: [
-          { icon: '☕', text: 'Virtual Coffee & Late Night Gossip Session' },
-          { icon: '🍔', text: 'Food Delivery Treat: Dinner On Me' },
-          { icon: '🎬', text: 'Online Watch Party / Movie Night Pass' }
-        ],
-
-        triggerGiftOpen() {
-          const music = document.getElementById('bg-music');
-          if (music) music.play().catch(() => {});
-
-          this.flowerBloomed = true;
-          setTimeout(() => {
-            this.step = 'lock';
-            setTimeout(() => { this.flowerBloomed = false; }, 600);
-          }, 800);
-        },
-
-        pressKey(num) {
-          if (this.pin.length < 4) {
-            this.pin += num;
-            if (this.pin.length === 4) {
-              setTimeout(() => this.checkPin(), 250);
-            }
-          }
-        },
-
-        deleteKey() {
-          this.pin = this.pin.slice(0, -1);
-        },
-
-        checkPin() {
-          if (this.pin === this.correctPin) {
-            this.flowerBloomed = true;
-            setTimeout(() => {
-              this.step = 'main';
-              setTimeout(() => {
-                this.flowerBloomed = false;
-                this.initScratchCards();
-                confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
-              }, 600);
-            }, 800);
-          } else {
-            alert('Incorrect passkey! Try again.');
-            this.pin = '';
-          }
-        },
-
-        blowCandle() {
-          if (!this.candleBlown) {
-            this.candleBlown = true;
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.5 } });
-          }
-        },
-
-        async startMicBlow() {
-          try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            this.micActive = true;
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const analyser = audioContext.createAnalyser();
-            const microphone = audioContext.createMediaStreamSource(stream);
-            microphone.connect(analyser);
-            analyser.fftSize = 256;
-            const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-            const detectBlow = () => {
-              if (this.candleBlown) return;
-              analyser.getByteFrequencyData(dataArray);
-              let sum = 0;
-              for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
-              let average = sum / dataArray.length;
-
-              if (average > 45) { // Threshold for blow/loud sound
-                this.blowCandle();
-                stream.getTracks().forEach(track => track.stop());
-              } else {
-                requestAnimationFrame(detectBlow);
-              }
-            };
-            detectBlow();
-          } catch (err) {
-            alert("Microphone access declined or unavailable. You can tap the button to blow!");
-          }
-        },
-
-        drawJarNote() {
-          const rand = this.jarNotes[Math.floor(Math.random() * this.jarNotes.length)];
-          this.currentJarNote = `"${rand}"`;
-        },
-
-        initScratchCards() {
-          this.$nextTick(() => {
-            this.coupons.forEach((_, idx) => {
-              const canvas = document.getElementById(`scratch-${idx}`);
-              if (!canvas) return;
-
-              const ctx = canvas.getContext('2d');
-              canvas.width = canvas.offsetWidth;
-              canvas.height = canvas.offsetHeight;
-
-              ctx.fillStyle = '#f8bbd0';
-              ctx.fillRect(0, 0, canvas.width, canvas.height);
-              ctx.font = '12px Plus Jakarta Sans, sans-serif';
-              ctx.fillStyle = '#8c3a50';
-              ctx.textAlign = 'center';
-              ctx.fillText('✨ Scratch to Reveal ✨', canvas.width / 2, canvas.height / 2 + 4);
-
-              let isDrawing = false;
-              const scratch = (e) => {
-                if (!isDrawing) return;
-                const rect = canvas.getBoundingClientRect();
-                const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-                const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-
-                ctx.globalCompositeOperation = 'destination-out';
-                ctx.beginPath();
-                ctx.arc(x, y, 16, 0, Math.PI * 2);
-                ctx.fill();
-              };
-
-              ['mousedown', 'touchstart'].forEach(evt => canvas.addEventListener(evt, (e) => { isDrawing = true; scratch(e); }));
-              ['mousemove', 'touchmove'].forEach(evt => canvas.addEventListener(evt, scratch));
-              ['mouseup', 'touchend'].forEach(evt => canvas.addEventListener(evt, () => isDrawing = false));
-            });
-          });
-        },
-
-        initApp() {
-          const canvas = document.getElementById('petals-canvas');
-          if (!canvas) return;
-          const ctx = canvas.getContext('2d');
-          let width = canvas.width = window.innerWidth;
-          let height = canvas.height = window.innerHeight;
-
-          const petals = Array.from({ length: 22 }, () => ({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            size: Math.random() * 6 + 4,
-            speedY: Math.random() * 0.8 + 0.4,
-            speedX: Math.random() * 0.4 - 0.2
-          }));
-
-          function animate() {
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = 'rgba(248, 187, 208, 0.6)';
-            petals.forEach(p => {
-              ctx.beginPath();
-              ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-              ctx.fill();
-              p.y += p.speedY;
-              p.x += p.speedX;
-              if (p.y > height) { p.y = -10; p.x = Math.random() * width; }
-            });
-            requestAnimationFrame(animate);
-          }
-          animate();
-        }
-      };
-    }
-  </script>
-</body>
-</html>
