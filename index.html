@@ -202,8 +202,28 @@
             My biggest wish for you today (and always) is simple: to see you happy, smiling, and feeling as special as you truly are to me. Have the most amazing birthday! 🤍
           </p>
 
-          <button class="btn-next" onclick="goToScreen('screen-jar')">Open The Note Jar 🫙 ➔</button>
+          <button class="btn-next" onclick="goToScreen('screen-voicenote')">Listen To Voice Note 🎙️ ➔</button>
         </div>
+      </div>
+    </div>
+
+    <!-- SCREEN 5.5: VOICE NOTE -->
+    <div class="screen" id="screen-voicenote">
+      <div class="card voicenote-card tilt-card">
+        <h2 class="section-title">A Quick Voice Note 🎙️</h2>
+        <p class="deck-subtitle">Tap play to listen to a short audio wish</p>
+
+        <div class="voicenote-box">
+          <div class="voicenote-avatar">🌸</div>
+          <button class="btn-play-vn" id="vn-toggle-btn" onclick="toggleVoiceNote()">▶️ Play Message</button>
+          <div class="vn-status" id="vn-status-text">Click to play</div>
+          
+          <audio id="vn-audio" preload="auto">
+            <source src="voicenote.mp3" type="audio/mpeg">
+          </audio>
+        </div>
+
+        <button class="btn-next highlight" style="margin-top:25px;" onclick="goToScreen('screen-jar')">Open The Note Jar 🫙 ➔</button>
       </div>
     </div>
 
