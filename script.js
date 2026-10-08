@@ -335,3 +335,66 @@ function closeWishModal() {
   if (modal) modal.classList.remove('active');
 }
 
+/* Voice Note & Background Music Interlocking Logic */
+let bgWasPlayingBeforeVN = false;
+
+function toggleVoiceNote() {
+  const vnAudio = document.getElementById('vn-audio');
+  const bgMusic = document.getElementById('bg-music');
+  const vnBtn = document.getElementById('vn-toggle-btn');
+  const status = document.getElementById('vn-status-text');
+
+  if (!vnAudio) return;
+
+  if (vnAudio.paused) {
+    // Check if background music was active, pause it
+    if (bgMusic && !bgMusic.paused) {
+      bgWasPlayingBeforeVN = true;
+      bgMusic.pause();
+      const musicBtn = document.getElementById('audio-toggle-btn');
+      if (musicBtn) musicBtn.innerText = "▶️";
+    }
+
+    vnAudio.play().then(() => {
+      if (vnBtn) vnBtn.innerText = "⏸️ Pause Message";
+      if (status) status.innerText = "Playing voice note... 🎧";
+    }).catch(err => {
+      if (status) status.innerText = "Add 'voicenote.mp3' file to your folder!";
+    });
+
+  } else {
+    vnAudio.pause();
+    if (vnBtn) vnBtn.innerText = "▶️ Play Message";
+    if (status) status.innerText = "Paused";
+
+    // Resume background music if it was playing before
+    if (bgWasPlayingBeforeVN && bgMusic) {
+      bgMusic.play();
+      const musicBtn = document.getElementById('audio-toggle-btn');
+      if (musicBtn) musicBtn.innerText = "⏸️";
+    }
+  }
+}
+
+// Auto-resume background music when Voice Note finishes
+document.addEventListener('DOMContentLoaded', () => {
+  const vnAudio = document.getElementById('vn-audio');
+  const bgMusic = document.getElementById('bg-music');
+
+  if (vnAudio) {
+    vnAudio.addEventListener('ended', () => {
+      const vnBtn = document.getElementById('vn-toggle-btn');
+      const status = document.getElementById('vn-status-text');
+
+      if (vnBtn) vnBtn.innerText = "▶️ Replay Message";
+      if (status) status.innerText = "Voice note finished ✨";
+
+      // Resume background music
+      if (bgWasPlayingBeforeVN && bgMusic) {
+        bgMusic.play();
+        const musicBtn = document.getElementById('audio-toggle-btn');
+        if (musicBtn) musicBtn.innerText = "⏸️";
+      }
+    });
+  }
+});
