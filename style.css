@@ -299,3 +299,44 @@ body {
 .modal-header { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: #ec407a; margin-bottom: 12px; }
 .modal-body { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-style: italic; color: #333333; line-height: 1.5; margin-bottom: 22px; }
 .btn-close-modal { background: #ec407a; color: #ffffff; border: none; padding: 12px 26px; border-radius: 20px; font-size: 0.9rem; font-weight: 600; cursor: pointer; }
+
+/* Voice Note Screen */
+.voicenote-box {
+  background: #fff0f3;
+  border-radius: 20px;
+  padding: 25px 15px;
+  border: 1px dashed #f8bbd0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.voicenote-avatar {
+  font-size: 3rem;
+  animation: pulse 2s infinite alternate;
+}
+
+.btn-play-vn {
+  background: #ec407a;
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(236, 64, 122, 0.3);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.btn-play-vn:active {
+  transform: scale(0.96);
+}
+
+.vn-status {
+  font-size: 0.8rem;
+  color: #880e4f;
+  font-weight: 500;
+}
